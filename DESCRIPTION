@@ -10,4 +10,4 @@ License: AGPL-3
 Depends:
     R (>= 3.0.0)
 Imports:
-    whisker,httr (>= 0.5),jsonlite
+    whisker,httr (>= 0.5),jsonlite,methods
