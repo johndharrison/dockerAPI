@@ -8,4 +8,4 @@ Maintainer: John Harrison <johndharrison0@gmail.com>
 Description: Provides a set of bindings for the Docker API.
 License: AGPL-3
 Depends:
-  R (>= 3.0.0),RCurl,RJSONIO
+    R (>= 3.0.0),httr,jsonlite
