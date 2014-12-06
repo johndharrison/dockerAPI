@@ -104,10 +104,11 @@ dockerAPI <- setRefClass("dockerAPI",
                            
                            exportContainer = function(id, filename = tempfile(fileext = ".tar")){
                              'Export the contents of container id
-\\describe{
-\\item{\\code{id}:}{Container id.}
-\\item{\\code{filename}:}{A filename to export the tar to. If NULL is given the tar is returned in RAW format.}
-}'
+                             \\describe{
+                             \\item{\\code{id}:}{Container id.}
+                             \\item{\\code{filename}:}{A filename to export the tar to. If NULL is given the tar is returned in RAW format.}
+                             }
+                             '
                              dUrl <- list(scheme = "http", hostname = ip, port = port
                                           , path = "containers/{{id}}/export", params = NULL
                                           , fragment = NULL, query = NULL
@@ -147,30 +148,42 @@ dockerAPI <- setRefClass("dockerAPI",
                              'Start the container id
                              \\describe{
                              \\item{\\code{id}:}{Container id.}
-                             \\item{\\code{Binds}:}{}
-                             \\item{\\code{Links}:}{}
-                             \\item{\\code{LxcConf}:}{}
-                             \\item{\\code{PortBindings}:}{}
-                             \\item{\\code{PublishAllPorts}:}{}
-                             \\item{\\code{Privileged}:}{}
-                             \\item{\\code{Dns}:}{}
-                             \\item{\\code{DnsSearch}:}{}
-                             \\item{\\code{VolumesFrom}:}{}
-                             \\item{\\code{CapAdd}:}{}
-                             \\item{\\code{Capdrop}:}{}
-                             \\item{\\code{RestartPolicy}:}{}
-                             \\item{\\code{NetworkMode}:}{}
-                             \\item{\\code{Devices}:}{}
+                             \\item{\\code{Binds}:}{ A list of volume bindings for this container. Each volume binding is a string of the form container_path (to create a new volume for the container), host_path:container_path (to bind-mount a host path into the container), or host_path:container_path:ro (to make the bind-mount read-only inside the container).}
+                             \\item{\\code{Links}:}{A list of links for the container. Each link entry should be of of the form "container_name:alias"}
+                             \\item{\\code{LxcConf}:}{LXC specific configurations. These configurations will only work when using the lxc execution driver.}
+                             \\item{\\code{PortBindings}:}{ A map of exposed container ports and the host port they should map to. It should be specified in the form { <port>/<protocol>: [{ "HostPort": "<port>" }] } Take note that port is specified as a string and not an integer value.}
+                             \\item{\\code{PublishAllPorts}:}{ Allocates a random host port for all of a container\'s exposed ports. Specified as a boolean value.}
+                             \\item{\\code{Privileged}:}{Gives the container full access to the host. Specified as a boolean value.}
+                             \\item{\\code{Dns}:}{A list of dns servers for the container to use.}
+                             \\item{\\code{DnsSearch}:}{A list of DNS search domains}
+                             \\item{\\code{VolumesFrom}:}{A list of volumes to inherit from another container. Specified in the form <container name>[:<ro|rw>]}
+                             \\item{\\code{CapAdd}:}{A list of kernel capabilties to add to the container.}
+                             \\item{\\code{Capdrop}:}{A list of kernel capabilties to drop from the container.}
+                             \\item{\\code{RestartPolicy}:}{The behavior to apply when the container exits. The value is an object with a Name property of either "always" to always restart or "on-failure" to restart only when the container exit code is non-zero. If on-failure is used, MaximumRetryCount controls the number of times to retry before giving up. The default is not to restart. (optional)}
+                             \\item{\\code{NetworkMode}:}{Sets the networking mode for the container. Supported values are: bridge, host, and container:<name|id>}
+                             \\item{\\code{Devices}:}{A list of devices to add to the container specified in the form { "PathOnHost": "/dev/deviceName", "PathInContainer": "/dev/deviceName", "CgroupPermissions": "mrw"}}
                              }'
-                             if(is.null(height) || is.null(width)){
-                               stop("Please provide a height and width for the resized container.")
-                           }
                            dUrl <- list(scheme = "http", hostname = ip, port = port
-                                        , path = "containers/{{id}}/resize", params = NULL
-                                        , fragment = NULL, query = list(height = height, width = width)
+                                        , path = "containers/{{id}}/start", params = NULL
+                                        , fragment = NULL, query = NULL
                                         , username = NULL, password = NULL)
                            class(dUrl) <- "url"
                            content(GET(whisker.render(build_url(dUrl))))
+                           },
+                           
+                           stopContainer = function(id, t = NULL){
+                             'Stop the container id
+                             \\describe{
+                             \\item{\\code{id}:}{Container id.}
+                             \\item{\\code{t}:}{number of seconds to wait before killing the container.}
+                             }
+                             '
+                             dUrl <- list(scheme = "http", hostname = ip, port = port
+                                          , path = "containers/{{id}}/stop", params = NULL
+                                          , fragment = NULL, query = NULL
+                                          , username = NULL, password = NULL)
+                             class(dUrl) <- "url"
+                             POST(whisker.render(build_url(dUrl)), body = list(t = t))
                            }
                          )
 )
