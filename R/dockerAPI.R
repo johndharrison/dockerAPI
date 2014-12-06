@@ -118,6 +118,59 @@ dockerAPI <- setRefClass("dockerAPI",
                              }else{
                                content(GET(whisker.render(build_url(dUrl))))
                              }
+                           },
+                           
+                           resizeContainer = function(id, height = NULL, width = NULL){
+                             'Resize the TTY of container id
+                             \\describe{
+                             \\item{\\code{id}:}{Container id.}
+                             \\item{\\code{height}:}{Height for the resized container.}
+                             \\item{\\code{width}:}{Width for the resized container.}
+                             }'
+                             if(is.null(height) || is.null(width)){
+                               stop("Please provide a height and width for the resized container.")
+                             }
+                             dUrl <- list(scheme = "http", hostname = ip, port = port
+                                          , path = "containers/{{id}}/resize", params = NULL
+                                          , fragment = NULL, query = list(height = height, width = width)
+                                          , username = NULL, password = NULL)
+                             class(dUrl) <- "url"
+                             content(GET(whisker.render(build_url(dUrl))))
+                           },
+                           
+                           startContainer = function(id, Binds = NULL, Links = NULL, LxcConf = NULL, PortBindings = NULL
+                                                      , PublishAllPorts = FALSE, Privileged = FALSE, Dns = NULL, DnsSearch = NULL
+                                                     , VolumesFrom = NULL, CapAdd = NULL, Capdrop = NULL
+                                                     , RestartPolicy = "\"Name\": \"on-failure\""
+                                                     , NetworkMode = "Bridge"
+                                                     , Devices = NULL){
+                             'Start the container id
+                             \\describe{
+                             \\item{\\code{id}:}{Container id.}
+                             \\item{\\code{Binds}:}{}
+                             \\item{\\code{Links}:}{}
+                             \\item{\\code{LxcConf}:}{}
+                             \\item{\\code{PortBindings}:}{}
+                             \\item{\\code{PublishAllPorts}:}{}
+                             \\item{\\code{Privileged}:}{}
+                             \\item{\\code{Dns}:}{}
+                             \\item{\\code{DnsSearch}:}{}
+                             \\item{\\code{VolumesFrom}:}{}
+                             \\item{\\code{CapAdd}:}{}
+                             \\item{\\code{Capdrop}:}{}
+                             \\item{\\code{RestartPolicy}:}{}
+                             \\item{\\code{NetworkMode}:}{}
+                             \\item{\\code{Devices}:}{}
+                             }'
+                             if(is.null(height) || is.null(width)){
+                               stop("Please provide a height and width for the resized container.")
+                           }
+                           dUrl <- list(scheme = "http", hostname = ip, port = port
+                                        , path = "containers/{{id}}/resize", params = NULL
+                                        , fragment = NULL, query = list(height = height, width = width)
+                                        , username = NULL, password = NULL)
+                           class(dUrl) <- "url"
+                           content(GET(whisker.render(build_url(dUrl))))
                            }
                          )
 )

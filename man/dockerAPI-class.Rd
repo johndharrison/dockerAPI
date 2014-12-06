@@ -38,7 +38,7 @@ dockerAPI is a generator object.
 \item{\code{exportContainer(id, filename = tempfile(fileext = ".tar"))}}{Export the contents of container id
 \describe{
 \item{\code{id}:}{Container id.}
-\item{\code{filename}:}{A filename to export the tar to. If NULL is given the tar is returned.}
+\item{\code{filename}:}{A filename to export the tar to. If NULL is given the tar is returned in RAW format.}
 }}
 
 \item{\code{get(all = TRUE, limit = NULL, since = NULL, before = NULL,
@@ -54,6 +54,36 @@ dockerAPI is a generator object.
 \item{\code{inspectContainer(id)}}{Return low-level information on the container id
 \describe{
 \item{\code{id}:}{Container id.}
+}}
+
+\item{\code{resizeContainer(id, height = NULL, width = NULL)}}{Resize the TTY of container id
+\describe{
+\item{\code{id}:}{Container id.}
+\item{\code{height}:}{Height for the resized container.}
+\item{\code{width}:}{Width for the resized container.}
+}}
+
+\item{\code{startContainer(id, Binds = NULL, Links = NULL, LxcConf = NULL,
+  PortBindings = NULL, PublishAllPorts = FALSE, Privileged = FALSE,
+  Dns = NULL, DnsSearch = NULL, VolumesFrom = NULL, CapAdd = NULL,
+  Capdrop = NULL, RestartPolicy = "\\"Name\\": \\"on-failure\\"",
+  NetworkMode = "Bridge", Devices = NULL)}}{Start the container id
+\describe{
+\item{\code{id}:}{Container id.}
+\item{\code{Binds}:}{}
+\item{\code{Links}:}{}
+\item{\code{LxcConf}:}{}
+\item{\code{PortBindings}:}{}
+\item{\code{PublishAllPorts}:}{}
+\item{\code{Privileged}:}{}
+\item{\code{Dns}:}{}
+\item{\code{DnsSearch}:}{}
+\item{\code{VolumesFrom}:}{}
+\item{\code{CapAdd}:}{}
+\item{\code{Capdrop}:}{}
+\item{\code{RestartPolicy}:}{}
+\item{\code{NetworkMode}:}{}
+\item{\code{Devices}:}{}
 }}
 }}
 \examples{
