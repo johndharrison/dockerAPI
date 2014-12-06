@@ -13,6 +13,17 @@ dockerAPI is a generator object.
 \section{Methods}{
 
 \describe{
+\item{\code{containerLogs(id, follow = FALSE, stdout = FALSE, stderr = FALSE,
+  timestamps = FALSE, tail = "all")}}{Get stdout and stderr logs from the container id
+\describe{
+\item{\code{id}:}{Container id.}
+\item{\code{follow}:}{1/True/true or 0/False/false, return stream. Default false}
+\item{\code{stdout}:}{1/True/true or 0/False/false, show stdout log. Default false}
+\item{\code{stderr}:}{1/True/true or 0/False/false, show stderr log. Default false}
+\item{\code{timestamps}:}{1/True/true or 0/False/false, print timestamps for every log line. Default false}
+\item{\code{tail}:}{Output specified number of lines at the end of logs: all or <number>. Default all}
+}}
+
 \item{\code{containerProcesses(id, ps_args = NULL)}}{List processes running inside the container id
 \describe{
 \item{\code{id}:}{Container id.}

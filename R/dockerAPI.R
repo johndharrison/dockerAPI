@@ -68,6 +68,25 @@ dockerAPI <- setRefClass("dockerAPI",
                              res <- content(GET(whisker.render(build_url(dUrl))))
                              setNames(do.call(rbind.data.frame, res[["Processes"]])
                                       , unlist(res$Titles))
+                           },
+                           
+                           containerLogs = function(id, follow = FALSE, stdout = FALSE, stderr = FALSE, timestamps = FALSE, tail = "all"){
+                             'Get stdout and stderr logs from the container id
+                             \\describe{
+                             \\item{\\code{id}:}{Container id.}
+                             \\item{\\code{follow}:}{1/True/true or 0/False/false, return stream. Default false}
+                             \\item{\\code{stdout}:}{1/True/true or 0/False/false, show stdout log. Default false}
+                             \\item{\\code{stderr}:}{1/True/true or 0/False/false, show stderr log. Default false}
+                             \\item{\\code{timestamps}:}{1/True/true or 0/False/false, print timestamps for every log line. Default false}
+                             \\item{\\code{tail}:}{Output specified number of lines at the end of logs: all or <number>. Default all}
+                             }'
+                             dUrl <- list(scheme = "http", hostname = ip, port = port
+                                          , path = "containers/{{id}}/logs", params = NULL
+                                          , fragment = NULL, query = list(follow = follow, stdout = stdout
+                                                                          , stderr = stderr, timestamps = timestamps, tail = tail)
+                                          , username = NULL, password = NULL)
+                             class(dUrl) <- "url"
+                             content(GET(whisker.render(build_url(dUrl))))
                            }
                          )
 )
