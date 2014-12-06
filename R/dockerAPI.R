@@ -87,6 +87,37 @@ dockerAPI <- setRefClass("dockerAPI",
                                           , username = NULL, password = NULL)
                              class(dUrl) <- "url"
                              content(GET(whisker.render(build_url(dUrl))))
+                           },
+                           
+                           containerChanges = function(id){
+                             'Inspect changes on container id\'s filesystem
+\\describe{
+\\item{\\code{id}:}{Container id.}
+}'
+                             dUrl <- list(scheme = "http", hostname = ip, port = port
+                                          , path = "containers/{{id}}/changes", params = NULL
+                                          , fragment = NULL, query = NULL
+                                          , username = NULL, password = NULL)
+                             class(dUrl) <- "url"
+                             content(GET(whisker.render(build_url(dUrl))), simplifyDataFrame = TRUE)
+                           },
+                           
+                           exportContainer = function(id, filename = tempfile(fileext = ".tar")){
+                             'Export the contents of container id
+\\describe{
+\\item{\\code{id}:}{Container id.}
+\\item{\\code{filename}:}{A filename to export the tar to. If NULL is given the tar is returned in RAW format.}
+}'
+                             dUrl <- list(scheme = "http", hostname = ip, port = port
+                                          , path = "containers/{{id}}/export", params = NULL
+                                          , fragment = NULL, query = NULL
+                                          , username = NULL, password = NULL)
+                             class(dUrl) <- "url"
+                             if(!is.null(filename)){
+                               GET(whisker.render(build_url(dUrl)), write_disk(filename))
+                             }else{
+                               content(GET(whisker.render(build_url(dUrl))))
+                             }
                            }
                          )
 )

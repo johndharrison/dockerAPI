@@ -13,6 +13,11 @@ dockerAPI is a generator object.
 \section{Methods}{
 
 \describe{
+\item{\code{containerChanges(id)}}{Inspect changes on container id's filesystem
+\describe{
+\item{\code{id}:}{Container id.}
+}}
+
 \item{\code{containerLogs(id, follow = FALSE, stdout = FALSE, stderr = FALSE,
   timestamps = FALSE, tail = "all")}}{Get stdout and stderr logs from the container id
 \describe{
@@ -28,6 +33,12 @@ dockerAPI is a generator object.
 \describe{
 \item{\code{id}:}{Container id.}
 \item{\code{ps_args}:}{ps arguments to use (e.g., aux). docker os dependent see \url{https://github.com/docker/docker/issues/8075}}
+}}
+
+\item{\code{exportContainer(id, filename = tempfile(fileext = ".tar"))}}{Export the contents of container id
+\describe{
+\item{\code{id}:}{Container id.}
+\item{\code{filename}:}{A filename to export the tar to. If NULL is given the tar is returned.}
 }}
 
 \item{\code{get(all = TRUE, limit = NULL, since = NULL, before = NULL,
