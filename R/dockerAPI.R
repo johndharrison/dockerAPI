@@ -5,6 +5,7 @@
 #' dockerAPI is a generator object. 
 #'
 #' @import jsonlite
+#' @import whisker 
 #' @import httr
 #' @export dockerAPI
 #' @exportClass dockerAPI
@@ -38,6 +39,35 @@ dockerAPI <- setRefClass("dockerAPI",
                                           , username = NULL, password = NULL)
                              class(dUrl) <- "url"
                              content(GET(build_url(dUrl)), simplifyDataFrame = TRUE)
+                           },
+                           
+                           inspectContainer = function(id){
+                             'Return low-level information on the container id
+\\describe{
+\\item{\\code{id}:}{Container id.}
+}'
+                             dUrl <- list(scheme = "http", hostname = ip, port = port
+                                          , path = "containers/{{id}}/json", params = NULL
+                                          , fragment = NULL, query = NULL
+                                          , username = NULL, password = NULL)
+                             class(dUrl) <- "url"
+                             content(GET(whisker.render(build_url(dUrl))), simplifyDataFrame = TRUE)
+                           },
+                           
+                           containerProcesses = function(id, ps_args = NULL){
+                             'List processes running inside the container id
+                             \\describe{
+                             \\item{\\code{id}:}{Container id.}
+                             \\item{\\code{ps_args}:}{ps arguments to use (e.g., aux). docker os dependent see \\url{https://github.com/docker/docker/issues/8075}}
+                             }'
+                             dUrl <- list(scheme = "http", hostname = ip, port = port
+                                          , path = "containers/{{id}}/top", params = NULL
+                                          , fragment = NULL, query = list("ps_args" = ps_args)
+                                          , username = NULL, password = NULL)
+                             class(dUrl) <- "url"
+                             res <- content(GET(whisker.render(build_url(dUrl))))
+                             setNames(do.call(rbind.data.frame, res[["Processes"]])
+                                      , unlist(res$Titles))
                            }
                          )
 )

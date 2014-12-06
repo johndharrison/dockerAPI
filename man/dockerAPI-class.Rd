@@ -13,6 +13,12 @@ dockerAPI is a generator object.
 \section{Methods}{
 
 \describe{
+\item{\code{containerProcesses(id, ps_args = NULL)}}{List processes running inside the container id
+\describe{
+\item{\code{id}:}{Container id.}
+\item{\code{ps_args}:}{ps arguments to use (e.g., aux). docker os dependent see \url{https://github.com/docker/docker/issues/8075}}
+}}
+
 \item{\code{get(all = TRUE, limit = NULL, since = NULL, before = NULL,
   size = NULL)}}{List containers:
 \describe{
@@ -21,6 +27,11 @@ dockerAPI is a generator object.
 \item{\code{since}:}{Show only containers created since Id, include non-running ones.}
 \item{\code{before}:}{Show only containers created before Id, include non-running ones.}
 \item{\code{size}:}{1/True/true or 0/False/false, Show the containers sizes}
+}}
+
+\item{\code{inspectContainer(id)}}{Return low-level information on the container id
+\describe{
+\item{\code{id}:}{Container id.}
 }}
 }}
 \examples{
