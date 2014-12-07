@@ -15,6 +15,6 @@
 #' }
 
 errorHandler <- setRefClass("errorHandler",
-                            fields = list()
+                            fields = list(),
                             methods = list()
                             )

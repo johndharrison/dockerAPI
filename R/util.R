@@ -1,6 +1,6 @@
 #' @export .DollarNames.docker
 #' @export .DollarNames.dockerContainer
-#' @export .DollarNames.dockermage
+#' @export .DollarNames.dockerImage
 #' @import methods
 
 .DollarNames.docker <- function(x, pattern){

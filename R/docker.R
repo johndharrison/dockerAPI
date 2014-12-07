@@ -16,7 +16,6 @@
 #' }
 
 docker <- setRefClass("docker",
-                      fields = list(),
                       contains = "errorHandler",
                       fields = list(ip = "character",
                                     port = "integer"),
@@ -40,6 +39,6 @@ docker <- setRefClass("docker",
                                        , username = NULL, password = NULL)
                           class(dUrl) <- "url"
                           content(GET(build_url(dUrl)), simplifyDataFrame = TRUE)
-                        },
+                        }
                       )
 )
