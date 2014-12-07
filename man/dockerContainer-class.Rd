@@ -10,14 +10,16 @@ dockerContainer is a generator object.
 \section{Methods}{
 
 \describe{
-\item{\code{inspect()}}{Return low-level information on the container}
+\item{\code{fsChanges()}}{Inspect changes on containers filesystem.}
 
-\item{\code{listProcesses(ps_args = NULL)}}{List processes running inside the container
+\item{\code{inspect()}}{Return low-level information on the container.}
+
+\item{\code{listProcesses(ps_args = NULL)}}{List processes running inside the container.
 \describe{
 \item{\code{ps_args}:}{ps arguments to use (e.g., aux). docker os dependent see \url{https://github.com/docker/docker/issues/8075}}
 }}
 
-\item{\code{logs(stdout = FALSE, stderr = FALSE, timestamps = FALSE, tail = "all")}}{Get stdout and stderr logs from the container id
+\item{\code{logs(stdout = FALSE, stderr = FALSE, timestamps = FALSE, tail = "all")}}{Get stdout and stderr logs from the container.
 \describe{
 \item{\code{stdout}:}{1/True/true or 0/False/false, show stdout log. Default false}
 \item{\code{stderr}:}{1/True/true or 0/False/false, show stderr log. Default false}

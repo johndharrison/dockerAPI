@@ -37,7 +37,7 @@ dockerContainer <- setRefClass("dockerContainer",
                                  },
                                  
                                  inspect = function(){
-                                   'Return low-level information on the container
+                                   'Return low-level information on the container.
                           '
                                    dUrl <- list(scheme = "http", hostname = ip, port = port
                                                 , path = "containers/{{appid}}/json", params = NULL
@@ -50,7 +50,7 @@ dockerContainer <- setRefClass("dockerContainer",
                                  },
                                  
                                  listProcesses = function(ps_args = NULL){
-                                   'List processes running inside the container
+                                   'List processes running inside the container.
                              \\describe{
                              \\item{\\code{ps_args}:}{ps arguments to use (e.g., aux). docker os dependent see \\url{https://github.com/docker/docker/issues/8075}}
                              }'
@@ -67,7 +67,7 @@ dockerContainer <- setRefClass("dockerContainer",
                                  },
                                  
                                  logs = function(stdout = FALSE, stderr = FALSE, timestamps = FALSE, tail = "all"){
-                                   'Get stdout and stderr logs from the container id
+                                   'Get stdout and stderr logs from the container.
                           \\describe{
                           \\item{\\code{stdout}:}{1/True/true or 0/False/false, show stdout log. Default false}
                           \\item{\\code{stderr}:}{1/True/true or 0/False/false, show stderr log. Default false}
@@ -84,6 +84,19 @@ dockerContainer <- setRefClass("dockerContainer",
                                    checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
                                    out <- content(response)
                                    capture.output(cat(rawToChar(out[!out == as.raw(0)])))
+                                 },
+                                 
+                                 fsChanges = function(){
+                                   'Inspect changes on containers filesystem.
+                                   '
+                                   dUrl <- list(scheme = "http", hostname = ip, port = port
+                                                , path = "containers/{{appid}}/changes", params = NULL
+                                                , fragment = NULL, query = NULL
+                                                , username = NULL, password = NULL)
+                                   class(dUrl) <- "url"
+                                   appid <- id
+                                   checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
+                                   content(response, simplifyDataFrame = TRUE)
                                  }
                                )
 )
