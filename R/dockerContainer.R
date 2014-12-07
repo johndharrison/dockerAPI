@@ -7,7 +7,7 @@
 #' @import httr
 #' @export dockerContainer
 #' @exportClass dockerContainer
-#' @aliases dockerAPI
+#' @aliases dockerContainer
 #' @include docker.R
 #' @examples
 #' \dontrun{
@@ -34,6 +34,36 @@ dockerContainer <- setRefClass("dockerContainer",
                           status <<- status
                           command <<- command
                           callSuper(...)
+                        },
+                        
+                        inspect = function(){
+                          'Return low-level information on the container
+                          '
+                          dUrl <- list(scheme = "http", hostname = ip, port = port
+                                       , path = "containers/{{id}}/json", params = NULL
+                                       , fragment = NULL, query = NULL
+                                       , username = NULL, password = NULL)
+                          class(dUrl) <- "url"
+                          id <- .self$id
+                          checkResponse(GET(whisker.render(build_url(dUrl))))
+                          content(response, simplifyDataFrame = TRUE)
+                        },
+                        
+                        listProcesses = function(ps_args = NULL){
+                          'List processes running inside the container
+                             \\describe{
+                             \\item{\\code{ps_args}:}{ps arguments to use (e.g., aux). docker os dependent see \\url{https://github.com/docker/docker/issues/8075}}
+                             }'
+                          dUrl <- list(scheme = "http", hostname = ip, port = port
+                                       , path = "containers/{{id}}/top", params = NULL
+                                       , fragment = NULL, query = list("ps_args" = ps_args)
+                                       , username = NULL, password = NULL)
+                          class(dUrl) <- "url"
+                          id <- .self$id
+                          checkResponse(GET(whisker.render(build_url(dUrl))))
+                          res <- content(reponse)
+                          setNames(do.call(rbind.data.frame, res[["Processes"]])
+                                   , unlist(res$Titles))
                         }
                           )
 )
