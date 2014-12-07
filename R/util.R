@@ -46,7 +46,8 @@ rbind.containerList <- function(x){
 
 `[.containerList` <- function(x, i ,j){
   if(missing(j)){
-    return(.Primitive("[")(unclass(x), i))
+    res <- .Primitive("[")(unclass(x), i)
+    return(`class<-`(res, "containerList"))
   }else{
     rbind(x)[i,j]
   }
