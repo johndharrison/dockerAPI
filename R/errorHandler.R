@@ -26,10 +26,14 @@ errorHandler <- setRefClass("errorHandler",
                                 callSuper(...)
                               },
                               
-                              checkResponse = function(response, pass = c(), warnings = c(), errors = c()){
-                                response <<- response
-                                if(!response$status_code %in% pass){
-                                  stop(capture.output(cat(content(myContainer$response))), call. = FALSE)
+                              checkResponse = function(appresponse, pass = c(), warnings = data.frame(), errors = c()){
+                                response <<- appresponse
+                                if(!appresponse$status_code %in% pass){
+                                  if(!appresponse$status_code %in% errors$status_code){
+                                    base::stop(capture.output(cat(content(appresponse))), call. = FALSE)                                    
+                                  }else{
+                                    base::stop(errors$message[errors$status_code == appresponse$status_code], call. = FALSE)
+                                  }
                                 }
                               })
                             )
