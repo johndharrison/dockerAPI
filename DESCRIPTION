@@ -11,3 +11,10 @@ Depends:
     R (>= 3.0.0)
 Imports:
     whisker,httr (>= 0.5),jsonlite,methods
+Collate:
+    'errorHandler.R'
+    'docker.R'
+    'dockerAPI.R'
+    'dockerContainer.R'
+    'dockerImage.R'
+    'util.R'

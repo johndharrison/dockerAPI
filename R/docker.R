@@ -38,7 +38,13 @@ docker <- setRefClass("docker",
                                        , fragment = NULL, query = list(all = all, limit = limit, since = since, before = before, size = size)
                                        , username = NULL, password = NULL)
                           class(dUrl) <- "url"
-                          content(GET(build_url(dUrl)), simplifyDataFrame = TRUE)
+                          res <- content(GET(build_url(dUrl)), simplifyDataFrame = TRUE)
+                          names(res) <- c("command", "created", "id", "image", "names", "ports", "status")
+                          res$created <- as.POSIXct(res$created, origin = "1970-01-01")
+                          containers <- lapply(seq(nrow(res)), function(x){
+                            do.call(dockerContainer, res[x,])$import(.self)
+                          })
+                          `class<-`(containers, "containerList")
                         }
                       )
 )
