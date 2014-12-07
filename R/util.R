@@ -3,6 +3,7 @@
 #' @export .DollarNames.dockerImage
 #' @export print.containerList
 #' @export rbind.containerList
+#' @export [.containerList
 #' @import methods
 
 .DollarNames.docker <- function(x, pattern){
@@ -37,8 +38,17 @@ rbind.containerList <- function(x){
     out <- lapply(c(id = "id", created = "created", image = "image", names = "names"
              ,ports = "ports", status = "status", command = "command"), y$field)
     out$ports <- I(out$ports); out$names <- I(out$names)
-    data.frame(out)
+    data.frame(out, stringsAsFactors = FALSE)
   }
   )
   do.call(rbind.data.frame, res)
+}
+
+`[.containerList` <- function(x, i ,j){
+  if(missing(j)){
+    return(.Primitive("[")(unclass(x), i))
+  }else{
+    rbind(x)[i,j]
+  }
+  
 }
