@@ -17,6 +17,8 @@ Class.  No effect on the object itself.}
 
 \item{\code{inspect()}}{Return low-level information on the container.}
 
+\item{\code{kill()}}{Kill the container.}
+
 \item{\code{listProcesses(ps_args = NULL)}}{List processes running inside the container.
 \describe{
 \item{\code{ps_args}:}{ps arguments to use (e.g., aux). docker os dependent see \url{https://github.com/docker/docker/issues/8075}}

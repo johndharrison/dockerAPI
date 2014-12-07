@@ -167,6 +167,18 @@ dockerContainer <- setRefClass("dockerContainer",
                                    class(dUrl) <- "url"
                                    appid <- id
                                    checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
+                                 },
+                                 
+                                 kill = function(){
+                                   'Kill the container.
+                                   '
+                                   dUrl <- list(scheme = "http", hostname = ip, port = port
+                                                , path = "containers/{{appid}}/kill", params = NULL
+                                                , fragment = NULL, query = NULL
+                                                , username = NULL, password = NULL)
+                                   class(dUrl) <- "url"
+                                   appid <- id
+                                   checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
                                  }
                                )
 )
