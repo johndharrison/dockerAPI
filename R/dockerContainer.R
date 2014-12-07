@@ -97,6 +97,26 @@ dockerContainer <- setRefClass("dockerContainer",
                                    appid <- id
                                    checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
                                    content(response, simplifyDataFrame = TRUE)
+                                 },
+                                 
+                                 export = function(filename = tempfile(fileext = ".tar")){
+                                   'Export the contents of the container.
+                                   \\describe{
+                                   \\item{\\code{filename}:}{A filename to export the tar to. If NULL is given the tar is returned in RAW format.}
+                                   }
+                                   '
+                                   dUrl <- list(scheme = "http", hostname = ip, port = port
+                                                , path = "containers/{{appid}}/export", params = NULL
+                                                , fragment = NULL, query = NULL
+                                                , username = NULL, password = NULL)
+                                   class(dUrl) <- "url"
+                                   appid <- id
+                                   if(!is.null(filename)){
+                                     checkResponse(GET(whisker.render(build_url(dUrl)), write_disk(filename)), pass = c(200L))
+                                   }else{
+                                     checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
+                                     content(response)
+                                   }
                                  }
                                )
 )

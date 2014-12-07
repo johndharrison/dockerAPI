@@ -10,6 +10,9 @@ dockerContainer is a generator object.
 \section{Methods}{
 
 \describe{
+\item{\code{export(Class)}}{Returns the result of coercing the object to
+Class.  No effect on the object itself.}
+
 \item{\code{fsChanges()}}{Inspect changes on containers filesystem.}
 
 \item{\code{inspect()}}{Return low-level information on the container.}
