@@ -26,7 +26,10 @@ errorHandler <- setRefClass("errorHandler",
                                 callSuper(...)
                               },
                               
-                              checkResponse = function(response, warnings = c(), errors = c()){
+                              checkResponse = function(response, pass = c(), warnings = c(), errors = c()){
                                 response <<- response
+                                if(!response$status_code %in% pass){
+                                  stop(capture.output(cat(content(myContainer$response))), call. = FALSE)
+                                }
                               })
                             )

@@ -39,7 +39,7 @@ docker <- setRefClass("docker",
                                        , fragment = NULL, query = list(all = all, limit = limit, since = since, before = before, size = size)
                                        , username = NULL, password = NULL)
                           class(dUrl) <- "url"
-                          checkResponse(GET(build_url(dUrl)))
+                          checkResponse(GET(build_url(dUrl)), pass = c(200L))
                           res <- content(response, simplifyDataFrame = TRUE)
                           names(res) <- c("command", "created", "id", "image", "names", "ports", "status")
                           res$created <- as.POSIXct(res$created, origin = "1970-01-01")

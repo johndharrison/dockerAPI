@@ -45,7 +45,7 @@ dockerContainer <- setRefClass("dockerContainer",
                                        , username = NULL, password = NULL)
                           class(dUrl) <- "url"
                           appid <- id
-                          checkResponse(GET(whisker.render(build_url(dUrl))))
+                          checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
                           content(response, simplifyDataFrame = TRUE)
                         },
                         
@@ -60,10 +60,10 @@ dockerContainer <- setRefClass("dockerContainer",
                                        , username = NULL, password = NULL)
                           class(dUrl) <- "url"
                           appid <- id
-                          checkResponse(GET(whisker.render(build_url(dUrl))))
-                          res <- content(reponse)
+                          checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
+                          res <- content(response)
                           setNames(do.call(rbind.data.frame, res[["Processes"]])
                                    , unlist(res$Titles))
                         }
-                          )
+                        )
 )
