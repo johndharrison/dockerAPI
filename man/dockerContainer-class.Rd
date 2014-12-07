@@ -29,6 +29,22 @@ Class.  No effect on the object itself.}
 \item{\code{timestamps}:}{1/True/true or 0/False/false, print timestamps for every log line. Default false}
 \item{\code{tail}:}{Output specified number of lines at the end of logs: all or <number>. Default all}
 }}
+
+\item{\code{resize(height = NULL, width = NULL)}}{Resize the TTY of the container.
+\describe{
+\item{\code{height}:}{Height for the resized container.}
+\item{\code{width}:}{Width for the resized container.}
+}}
+
+\item{\code{restart(t = NULL)}}{Restart the container.
+\describe{
+ \item{\code{t}:}{number of seconds to wait before killing the container.}
+}}
+
+\item{\code{stop(t = NULL)}}{Stop the container.
+\describe{
+ \item{\code{t}:}{number of seconds to wait before killing the container.}
+}}
 }}
 \examples{
 \dontrun{

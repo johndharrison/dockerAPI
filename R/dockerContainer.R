@@ -117,6 +117,56 @@ dockerContainer <- setRefClass("dockerContainer",
                                      checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
                                      content(response)
                                    }
+                                 },
+                                 
+                                 resize = function(height = NULL, width = NULL){
+                                   'Resize the TTY of the container.
+                                   \\describe{
+                                   \\item{\\code{height}:}{Height for the resized container.}
+                                   \\item{\\code{width}:}{Width for the resized container.}
+                                   }'
+                                   if(is.null(height) || is.null(width)){
+                                     stop("Please provide a height and width for the resized container.")
+                                   }
+                                   dUrl <- list(scheme = "http", hostname = ip, port = port
+                                                , path = "containers/{{appid}}/resize", params = NULL
+                                                , fragment = NULL, query = list(height = height, width = width)
+                                                , username = NULL, password = NULL)
+                                   class(dUrl) <- "url"
+                                   appid <- id
+                                   checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
+                                   content(response)
+                                 },
+                                 
+                                 stop = function(t = NULL){
+                                   'Stop the container.
+                                   \\describe{
+                                    \\item{\\code{t}:}{number of seconds to wait before killing the container.}
+                                   }
+                                   '
+                                   dUrl <- list(scheme = "http", hostname = ip, port = port
+                                                , path = "containers/{{appid}}/stop", params = NULL
+                                                , fragment = NULL, query = list(t = t)
+                                                , username = NULL, password = NULL)
+                                   class(dUrl) <- "url"
+                                   appid <- id
+                                   checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L)
+                                                 , errors = data.frame(status_code = 304, message = "container already stopped", stringsAsFactors = FALSE))
+                                 },
+                                 
+                                 restart = function(t = NULL){
+                                   'Restart the container.
+                                   \\describe{
+                                    \\item{\\code{t}:}{number of seconds to wait before killing the container.}
+                                   }
+                                   '
+                                   dUrl <- list(scheme = "http", hostname = ip, port = port
+                                                , path = "containers/{{appid}}/restart", params = NULL
+                                                , fragment = NULL, query = list(t = t)
+                                                , username = NULL, password = NULL)
+                                   class(dUrl) <- "url"
+                                   appid <- id
+                                   checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
                                  }
                                )
 )
