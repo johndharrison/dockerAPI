@@ -20,9 +20,10 @@ docker <- setRefClass("docker",
                       fields = list(ip = "character",
                                     port = "integer"),
                       methods = list(
-                        initialize = function(ip = "localhost", port = 2375L){
+                        initialize = function(ip = "localhost", port = 2375L, ...){
                           ip <<- ip
                           port <<- as.integer(port) # pre-empt user
+                          callSuper(...)
                         },
                         getContainers = function(all = TRUE, limit = NULL, since = NULL, before = NULL, size = NULL){
                           'List containers:
@@ -38,7 +39,8 @@ docker <- setRefClass("docker",
                                        , fragment = NULL, query = list(all = all, limit = limit, since = since, before = before, size = size)
                                        , username = NULL, password = NULL)
                           class(dUrl) <- "url"
-                          res <- content(GET(build_url(dUrl)), simplifyDataFrame = TRUE)
+                          checkResponse(GET(build_url(dUrl)))
+                          res <- content(response, simplifyDataFrame = TRUE)
                           names(res) <- c("command", "created", "id", "image", "names", "ports", "status")
                           res$created <- as.POSIXct(res$created, origin = "1970-01-01")
                           containers <- lapply(seq(nrow(res)), function(x){

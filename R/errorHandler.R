@@ -1,3 +1,4 @@
+setOldClass("response")
 #' CLASS errorHandler
 #'
 #' errorHandler Class uses the 
@@ -15,6 +16,17 @@
 #' }
 
 errorHandler <- setRefClass("errorHandler",
-                            fields = list(),
-                            methods = list()
+                            fields = list(
+                              response = "response"),
+                            methods = list(
+                              initialize = function(response = NULL, ...){
+                                if(is.null(response)){
+                                  response <<- `class<-`(list(), "response")
+                                }
+                                callSuper(...)
+                              },
+                              
+                              checkResponse = function(response, warnings = c(), errors = c()){
+                                response <<- response
+                              })
                             )
