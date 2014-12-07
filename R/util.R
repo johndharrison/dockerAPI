@@ -1,6 +1,8 @@
 #' @export .DollarNames.docker
 #' @export .DollarNames.dockerContainer
 #' @export .DollarNames.dockerImage
+#' @export print.containerList
+#' @export rbind.containerList
 #' @import methods
 
 .DollarNames.docker <- function(x, pattern){
@@ -24,4 +26,19 @@
   dockerMethods <- getRefClass("docker")$methods()
   dockerImageMethods <- getRefClass(class(x))$methods()
   grep(pattern, dockerImageMethods[!dockerImageMethods%in%c(superMethods, dockerMethods, errorMethods)], value=TRUE)
+}
+
+print.containerList <- function(x){
+  print(rbind(x))
+}
+
+rbind.containerList <- function(x){
+  res <- lapply(x, function(y){
+    out <- lapply(c(id = "id", created = "created", image = "image", names = "names"
+             ,ports = "ports", status = "status", command = "command"), y$field)
+    out$ports <- I(out$ports); out$names <- I(out$names)
+    data.frame(out)
+  }
+  )
+  do.call(rbind.data.frame, res)
 }
