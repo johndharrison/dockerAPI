@@ -47,6 +47,27 @@ docker <- setRefClass("docker",
                             do.call(dockerContainer, res[x,])$import(.self)
                           })
                           `class<-`(containers, "containerList")
+                        },
+                        
+                        getImages = function(all = FALSE, filters = NULL){
+                          'List images:
+                          \\describe{
+                          \\item{\\code{all}:}{1/True/true or 0/False/false, Show all images. Only running images are shown by default (i.e., this defaults to false)}
+                          \\item{\\code{filters}:}{a json encoded value of the filters (a map[string][]string) to process on the images list.}
+                           }'
+                          dUrl <- list(scheme = "http", hostname = ip, port = port
+                                       , path = "images/json", params = NULL
+                                       , fragment = NULL, query = list(all = all, filters = toJSON(filters))
+                                       , username = NULL, password = NULL)
+                          class(dUrl) <- "url"
+                          checkResponse(GET(build_url(dUrl)), pass = c(200L))
+                          res <- content(response, simplifyDataFrame = TRUE)
+                          names(res) <- c("created", "id", "parentId", "repoTags", "size", "virtualSize")
+                          res$created <- as.POSIXct(res$created, origin = "1970-01-01")
+                          containers <- lapply(seq(nrow(res)), function(x){
+                            do.call(dockerImage, res[x,])$import(.self)
+                          })
+                          `class<-`(containers, "imageList")
                         }
                       )
 )

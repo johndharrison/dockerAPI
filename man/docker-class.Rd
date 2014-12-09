@@ -19,6 +19,12 @@ docker is a generator object.
 \item{\code{before}:}{Show only containers created before Id, include non-running ones.}
 \item{\code{size}:}{1/True/true or 0/False/false, Show the containers sizes}
 }}
+
+\item{\code{getImages(all = FALSE, filters = NULL)}}{List images:
+\describe{
+\item{\code{all}:}{1/True/true or 0/False/false, Show all images. Only running images are shown by default (i.e., this defaults to false)}
+\item{\code{filters}:}{a json encoded value of the filters (a map[string][]string) to process on the images list.}
+ }}
 }}
 \examples{
 \dontrun{
