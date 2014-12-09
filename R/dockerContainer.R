@@ -179,6 +179,47 @@ dockerContainer <- setRefClass("dockerContainer",
                                    class(dUrl) <- "url"
                                    appid <- id
                                    checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
+                                 },
+                                 
+                                 pause = function(){
+                                   'Pause the container
+                                   '
+                                   dUrl <- list(scheme = "http", hostname = ip, port = port
+                                                , path = "containers/{{appid}}/pause", params = NULL
+                                                , fragment = NULL, query = NULL
+                                                , username = NULL, password = NULL)
+                                   class(dUrl) <- "url"
+                                   appid <- id
+                                   checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
+                                 },
+                                 
+                                 unpause = function(id){
+                                   'Unpause the container.
+                                   '
+                                   dUrl <- list(scheme = "http", hostname = ip, port = port
+                                                , path = "containers/{{appid}}/unpause", params = NULL
+                                                , fragment = NULL, query = NULL
+                                                , username = NULL, password = NULL)
+                                   class(dUrl) <- "url"
+                                   appid <- id
+                                   checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
+                                 },
+                                 
+                                 remove = function(force = FALSE, v = FALSE){
+                                   'Create an image, either by pulling it from the registry or by importing it.
+                                   \\describe{
+                                   \\item{\\code{force}:}{1/True/true or 0/False/false, default false.}
+                                   \\item{\\code{v}:}{1/True/true or 0/False/false, Remove the volumes associated to the container. Default false}
+                                   }'
+                               
+                                   dUrl <- list(scheme = "http", hostname = ip, port = port
+                                                , path = "containers/{{appid}}", params = NULL
+                                                , fragment = NULL, query = list(force = force, v = v)
+                                                , username = NULL, password = NULL)
+                                   class(dUrl) <- "url"
+                                   appid <- id
+                                   checkResponse(DELETE(whisker.render(build_url(dUrl))), pass = c(204L))
+                                   content(response, simplifyDataFrame = TRUE)
                                  }
                                )
 )
