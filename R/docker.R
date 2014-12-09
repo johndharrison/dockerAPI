@@ -68,6 +68,44 @@ docker <- setRefClass("docker",
                             do.call(dockerImage, res[x,])$import(.self)
                           })
                           `class<-`(containers, "imageList")
+                        },
+                        
+                        createImage = function(fromImage, fromSrc = NULL, repo = NULL, tag = NULL, registry = NULL, XRegistryAuth = NULL, ...){
+                          'Create an image, either by pulling it from the registry or by importing it.
+                               \\describe{
+                                \\item{\\code{fromImage}:}{Name of the image to pull.}
+                                \\item{\\code{fromSrc}:}{source to import, means stdin}
+                                \\item{\\code{repo}:}{Repository}
+                                \\item{\\code{tag}:}{Tag}
+                                \\item{\\code{registry}:}{Registry}
+                                \\item{\\code{XRegistryAuth}:}{Base64-encoded AuthConfig object.}
+                                \\item{\\code{...}:}{Option to pass to \\code{\\link{verbose}}}
+                                }
+                          '
+                          
+                          dUrl <- list(scheme = "http", hostname = ip, port = port
+                                       , path = "images/create", params = NULL
+                                       , fragment = NULL, query = list(fromImage = fromImage, fromSrc = fromSrc, repo = repo, tag = tag
+                                                                       , registry = registry, "X-Registry-Auth" = XRegistryAuth)
+                                       , username = NULL, password = NULL)
+                          class(dUrl) <- "url"
+                          checkResponse(POST(build_url(dUrl), verbose(...)), pass = c(200L))
+                          cat(content(response, "text"))
+                        },
+                        
+                        searchImages = function(term){
+                          'List images:
+                          \\describe{
+                          \\item{\\code{term}:}{Term to search.}
+                          }'
+                          if(missing(term)){stop("Please provide a search term", call. = FALSE)}
+                          dUrl <- list(scheme = "http", hostname = ip, port = port
+                                       , path = "/images/search", params = NULL
+                                       , fragment = NULL, query = list(term = term)
+                                       , username = NULL, password = NULL)
+                          class(dUrl) <- "url"
+                          checkResponse(GET(build_url(dUrl)), pass = c(200L))
+                          content(response, simplifyDataFrame = TRUE)
                         }
                       )
 )
