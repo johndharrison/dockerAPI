@@ -10,6 +10,18 @@ docker is a generator object.
 \section{Methods}{
 
 \describe{
+\item{\code{createImage(fromImage, fromSrc = NULL, repo = NULL, tag = NULL,
+  registry = NULL, XRegistryAuth = NULL, ...)}}{Create an image, either by pulling it from the registry or by importing it.
+     \describe{
+      \item{\code{fromImage}:}{Name of the image to pull.}
+      \item{\code{fromSrc}:}{source to import, means stdin}
+      \item{\code{repo}:}{Repository}
+      \item{\code{tag}:}{Tag}
+      \item{\code{registry}:}{Registry}
+      \item{\code{XRegistryAuth}:}{Base64-encoded AuthConfig object.}
+      \item{\code{...}:}{Option to pass to \code{\link{verbose}}}
+      }}
+
 \item{\code{getContainers(all = TRUE, limit = NULL, since = NULL, before = NULL,
   size = NULL)}}{List containers:
 \describe{
@@ -25,6 +37,11 @@ docker is a generator object.
 \item{\code{all}:}{1/True/true or 0/False/false, Show all images. Only running images are shown by default (i.e., this defaults to false)}
 \item{\code{filters}:}{a json encoded value of the filters (a map[string][]string) to process on the images list.}
  }}
+
+\item{\code{searchImages(term)}}{List images:
+\describe{
+\item{\code{term}:}{Term to search.}
+}}
 }}
 \examples{
 \dontrun{

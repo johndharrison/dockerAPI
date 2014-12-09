@@ -7,6 +7,19 @@
 \description{
 dockerImage is a generator object.
 }
+\section{Methods}{
+
+\describe{
+\item{\code{history()}}{Return the history of the image.}
+
+\item{\code{inspect()}}{Return low-level information on the image.}
+
+\item{\code{remove(force = FALSE, noprune = FALSE)}}{Remove an image
+\describe{
+ \item{\code{force}:}{1/True/true or 0/False/false, default false.}
+ \item{\code{noprune}:}{1/True/true or 0/False/false, default false.}
+ }}
+}}
 \examples{
 \dontrun{
 }

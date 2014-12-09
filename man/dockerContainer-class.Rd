@@ -32,6 +32,14 @@ Class.  No effect on the object itself.}
 \item{\code{tail}:}{Output specified number of lines at the end of logs: all or <number>. Default all}
 }}
 
+\item{\code{pause()}}{Pause the container}
+
+\item{\code{remove(force = FALSE, v = FALSE)}}{Create an image, either by pulling it from the registry or by importing it.
+\describe{
+\item{\code{force}:}{1/True/true or 0/False/false, default false.}
+\item{\code{v}:}{1/True/true or 0/False/false, Remove the volumes associated to the container. Default false}
+}}
+
 \item{\code{resize(height = NULL, width = NULL)}}{Resize the TTY of the container.
 \describe{
 \item{\code{height}:}{Height for the resized container.}
@@ -47,6 +55,8 @@ Class.  No effect on the object itself.}
 \describe{
  \item{\code{t}:}{number of seconds to wait before killing the container.}
 }}
+
+\item{\code{unpause(id)}}{Unpause the container.}
 }}
 \examples{
 \dontrun{
