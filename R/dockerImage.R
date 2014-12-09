@@ -43,8 +43,38 @@ dockerImage <- setRefClass("dockerImage",
                                             , fragment = NULL, query = NULL
                                             , username = NULL, password = NULL)
                                class(dUrl) <- "url"
-                               appid <- id
+                               appname <- name
                                checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
+                               content(response, simplifyDataFrame = TRUE)
+                             },
+                             
+                             history = function(){
+                               'Return the history of the image.'
+                               
+                               dUrl <- list(scheme = "http", hostname = ip, port = port
+                                            , path = "images/{{appname}}/history", params = NULL
+                                            , fragment = NULL, query = NULL
+                                            , username = NULL, password = NULL)
+                               class(dUrl) <- "url"
+                               appname <- name
+                               checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
+                               content(response, simplifyDataFrame = TRUE)
+                             },
+                             
+                             remove = function(force = FALSE, noprune = FALSE){
+                               'Remove an image
+                               \\describe{
+                                \\item{\\code{force}:}{1/True/true or 0/False/false, default false.}
+                                \\item{\\code{noprune}:}{1/True/true or 0/False/false, default false.}
+                                }'
+                               
+                               dUrl <- list(scheme = "http", hostname = ip, port = port
+                                            , path = "images/{{appname}}", params = NULL
+                                            , fragment = NULL, query = list(force = force, noprune = noprune)
+                                            , username = NULL, password = NULL)
+                               class(dUrl) <- "url"
+                               appname <- name
+                               checkResponse(DELETE(whisker.render(build_url(dUrl))), pass = c(200L))
                                content(response, simplifyDataFrame = TRUE)
                              }
                              
