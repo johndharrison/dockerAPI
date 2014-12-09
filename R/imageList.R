@@ -1,7 +1,7 @@
 #' @export
 rbind.imageList <- function(x){
   res <- lapply(x, function(y){
-    out <- lapply(c(id = "id", created = "created", parentId = "parentId",
+    out <- lapply(c(id = "id", created = "created", parentId = "parentId", name = "name",
                     repoTags = "repoTags", size = "size", virtualSize = "virtualSize"), y$field)
     out$repoTags <- I(out$repoTags)
     data.frame(out, stringsAsFactors = FALSE)
