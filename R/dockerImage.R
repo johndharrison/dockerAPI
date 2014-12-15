@@ -38,11 +38,8 @@ dockerImage <- setRefClass("dockerImage",
                              inspect = function(){
                                'Return low-level information on the image.
                           '
-                               dUrl <- list(scheme = "http", hostname = ip, port = port
-                                            , path = "images/{{appname}}/json", params = NULL
-                                            , fragment = NULL, query = NULL
-                                            , username = NULL, password = NULL)
-                               class(dUrl) <- "url"
+                               dUrl <- dockerUrl
+                               dUrl["path"] <- list("images/{{appname}}/json")
                                appname <- name
                                checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
                                content(response, simplifyDataFrame = TRUE)
@@ -50,12 +47,8 @@ dockerImage <- setRefClass("dockerImage",
                              
                              history = function(){
                                'Return the history of the image.'
-                               
-                               dUrl <- list(scheme = "http", hostname = ip, port = port
-                                            , path = "images/{{appname}}/history", params = NULL
-                                            , fragment = NULL, query = NULL
-                                            , username = NULL, password = NULL)
-                               class(dUrl) <- "url"
+                               dUrl <- dockerUrl
+                               dUrl["path"] <- list("images/{{appname}}/history")
                                appname <- name
                                checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
                                content(response, simplifyDataFrame = TRUE)
@@ -68,11 +61,9 @@ dockerImage <- setRefClass("dockerImage",
                                 \\item{\\code{noprune}:}{1/True/true or 0/False/false, default false.}
                                 }'
                                
-                               dUrl <- list(scheme = "http", hostname = ip, port = port
-                                            , path = "images/{{appname}}", params = NULL
-                                            , fragment = NULL, query = list(force = force, noprune = noprune)
-                                            , username = NULL, password = NULL)
-                               class(dUrl) <- "url"
+                               dUrl <- dockerUrl
+                               dUrl[c("path", "query")] <- list("images/{{appname}}"
+                                                                , list(force = force, noprune = noprune))
                                appname <- name
                                checkResponse(DELETE(whisker.render(build_url(dUrl))), pass = c(200L))
                                content(response, simplifyDataFrame = TRUE)

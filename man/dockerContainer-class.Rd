@@ -79,7 +79,7 @@ Class.  No effect on the object itself.}
  \item{\code{t}:}{number of seconds to wait before killing the container.}
 }}
 
-\item{\code{unpause(id)}}{Unpause the container.}
+\item{\code{unpause()}}{Unpause the container.}
 }}
 \examples{
 \dontrun{
