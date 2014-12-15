@@ -39,11 +39,8 @@ dockerContainer <- setRefClass("dockerContainer",
                                  inspect = function(){
                                    'Return low-level information on the container.
                           '
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}/json", params = NULL
-                                                , fragment = NULL, query = NULL
-                                                , username = NULL, password = NULL)
-                                   class(dUrl) <- "url"
+                                   dUrl <- dockerUrl
+                                   dUrl["path"] <- list("containers/{{appid}}/json")
                                    appid <- id
                                    checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
                                    content(response, simplifyDataFrame = TRUE)
@@ -54,11 +51,9 @@ dockerContainer <- setRefClass("dockerContainer",
                              \\describe{
                              \\item{\\code{ps_args}:}{ps arguments to use (e.g., aux). docker os dependent see \\url{https://github.com/docker/docker/issues/8075}}
                              }'
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}/top", params = NULL
-                                                , fragment = NULL, query = list("ps_args" = ps_args)
-                                                , username = NULL, password = NULL)
-                                   class(dUrl) <- "url"
+                                   dUrl <- dockerUrl
+                                   dUrl[c("path", "query")] <- list("containers/{{appid}}/top"
+                                                                    , list("ps_args" = ps_args))
                                    appid <- id
                                    checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
                                    res <- content(response)
@@ -74,13 +69,11 @@ dockerContainer <- setRefClass("dockerContainer",
                           \\item{\\code{timestamps}:}{1/True/true or 0/False/false, print timestamps for every log line. Default false}
                           \\item{\\code{tail}:}{Output specified number of lines at the end of logs: all or <number>. Default all}
                           }'
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}/logs", params = NULL
-                                                , fragment = NULL, query = list(follow = FALSE, stdout = stdout
-                                                                                , stderr = stderr, timestamps = timestamps, tail = tail)
-                                                , username = NULL, password = NULL)
+                                   dUrl <- dockerUrl
+                                   dUrl[c("path", "query")] <- list("containers/{{appid}}/logs"
+                                                                    , list(follow = FALSE, stdout = stdout
+                                                                           , stderr = stderr, timestamps = timestamps, tail = tail))
                                    appid <- id
-                                   class(dUrl) <- "url"
                                    checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
                                    out <- content(response)
                                    capture.output(cat(rawToChar(out[!out == as.raw(0)])))
@@ -89,11 +82,8 @@ dockerContainer <- setRefClass("dockerContainer",
                                  fsChanges = function(){
                                    'Inspect changes on containers filesystem.
                                    '
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}/changes", params = NULL
-                                                , fragment = NULL, query = NULL
-                                                , username = NULL, password = NULL)
-                                   class(dUrl) <- "url"
+                                   dUrl <- dockerUrl
+                                   dUrl["path"] <- list("containers/{{appid}}/changes")
                                    appid <- id
                                    checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
                                    content(response, simplifyDataFrame = TRUE)
@@ -105,11 +95,8 @@ dockerContainer <- setRefClass("dockerContainer",
                                    \\item{\\code{filename}:}{A filename to export the tar to. If NULL is given the tar is returned in RAW format.}
                                    }
                                    '
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}/export", params = NULL
-                                                , fragment = NULL, query = NULL
-                                                , username = NULL, password = NULL)
-                                   class(dUrl) <- "url"
+                                   dUrl <- dockerUrl
+                                   dUrl["path"] <- list("containers/{{appid}}/export")
                                    appid <- id
                                    if(!is.null(filename)){
                                      checkResponse(GET(whisker.render(build_url(dUrl)), write_disk(filename)), pass = c(200L))
@@ -128,11 +115,9 @@ dockerContainer <- setRefClass("dockerContainer",
                                    if(is.null(height) || is.null(width)){
                                      stop("Please provide a height and width for the resized container.")
                                    }
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}/resize", params = NULL
-                                                , fragment = NULL, query = list(height = height, width = width)
-                                                , username = NULL, password = NULL)
-                                   class(dUrl) <- "url"
+                                   dUrl <- dockerUrl
+                                   dUrl[c("path", "query")] <- list("containers/{{appid}}/resize"
+                                                                    , list(height = height, width = width))
                                    appid <- id
                                    checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
                                    content(response)
@@ -144,11 +129,9 @@ dockerContainer <- setRefClass("dockerContainer",
                                     \\item{\\code{t}:}{number of seconds to wait before killing the container.}
                                    }
                                    '
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}/stop", params = NULL
-                                                , fragment = NULL, query = list(t = t)
-                                                , username = NULL, password = NULL)
-                                   class(dUrl) <- "url"
+                                   dUrl <- dockerUrl
+                                   dUrl[c("path", "query")] <- list("containers/{{appid}}/stop"
+                                                                    , list(t = t))
                                    appid <- id
                                    checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L)
                                                  , errors = data.frame(status_code = 304, message = "container already stopped", stringsAsFactors = FALSE))
@@ -160,11 +143,9 @@ dockerContainer <- setRefClass("dockerContainer",
                                     \\item{\\code{t}:}{number of seconds to wait before killing the container.}
                                    }
                                    '
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}/restart", params = NULL
-                                                , fragment = NULL, query = list(t = t)
-                                                , username = NULL, password = NULL)
-                                   class(dUrl) <- "url"
+                                   dUrl <- dockerUrl
+                                   dUrl[c("path", "query")] <- list("containers/{{appid}}/restart"
+                                                                    , list(t = t))
                                    appid <- id
                                    checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
                                  },
@@ -172,11 +153,8 @@ dockerContainer <- setRefClass("dockerContainer",
                                  kill = function(){
                                    'Kill the container.
                                    '
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}/kill", params = NULL
-                                                , fragment = NULL, query = NULL
-                                                , username = NULL, password = NULL)
-                                   class(dUrl) <- "url"
+                                   dUrl <- dockerUrl
+                                   dUrl["path"] <- list("containers/{{appid}}/kill")
                                    appid <- id
                                    checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
                                  },
@@ -184,11 +162,8 @@ dockerContainer <- setRefClass("dockerContainer",
                                  pause = function(){
                                    'Pause the container
                                    '
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}/pause", params = NULL
-                                                , fragment = NULL, query = NULL
-                                                , username = NULL, password = NULL)
-                                   class(dUrl) <- "url"
+                                   dUrl <- dockerUrl
+                                   dUrl["path"] <- list("containers/{{appid}}/pause")
                                    appid <- id
                                    checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
                                  },
@@ -196,11 +171,8 @@ dockerContainer <- setRefClass("dockerContainer",
                                  unpause = function(id){
                                    'Unpause the container.
                                    '
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}/unpause", params = NULL
-                                                , fragment = NULL, query = NULL
-                                                , username = NULL, password = NULL)
-                                   class(dUrl) <- "url"
+                                   dUrl <- dockerUrl
+                                   dUrl["path",] <- list("containers/{{appid}}/unpause")
                                    appid <- id
                                    checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
                                  },
@@ -212,11 +184,9 @@ dockerContainer <- setRefClass("dockerContainer",
                                    \\item{\\code{v}:}{1/True/true or 0/False/false, Remove the volumes associated to the container. Default false}
                                    }'
                                
-                                   dUrl <- list(scheme = "http", hostname = ip, port = port
-                                                , path = "containers/{{appid}}", params = NULL
-                                                , fragment = NULL, query = list(force = force, v = v)
-                                                , username = NULL, password = NULL)
-                                   class(dUrl) <- "url"
+                                   dUrl <- dockerUrl
+                                   dUrl[c("path", "query")] <- list("containers/{{appid}}"
+                                                                    , list(force = force, v = v))
                                    appid <- id
                                    checkResponse(DELETE(whisker.render(build_url(dUrl))), pass = c(204L))
                                    content(response, simplifyDataFrame = TRUE)
@@ -245,12 +215,10 @@ dockerContainer <- setRefClass("dockerContainer",
                                    \\item{\\code{NetworkMode}:}{Sets the networking mode for the container. Supported values are: bridge, host, and container:<name|id>}
                                    \\item{\\code{Devices}:}{A list of devices to add to the container specified in the form { "PathOnHost": "/dev/deviceName", "PathInContainer": "/dev/deviceName", "CgroupPermissions": "mrw"}}
                                    }'
-                           dUrl <- list(scheme = "http", hostname = ip, port = port
-                                        , path = "containers/{{id}}/start", params = NULL
-                                        , fragment = NULL, query = NULL
-                                        , username = NULL, password = NULL)
-                           class(dUrl) <- "url"
-                           content(GET(whisker.render(build_url(dUrl))))
-                                   }
+                                   dUrl <- dockerUrl
+                                   dUrl[c("path", "query")] <- list("containers/{{id}}/start"
+                                                                    , list())
+                                   content(GET(whisker.render(build_url(dUrl))))
+                                 }
                                )
 )
