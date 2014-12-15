@@ -24,7 +24,7 @@ docker <- setRefClass("docker",
                           if(is.null(dckUrl)){
                             dockerUrl <<- `class<-`(list(), "url")
                           }else{
-                            if(!"url" %in% class(dUrl)){
+                            if(!"url" %in% class(dckUrl)){
                               dckUrl <- parse_url(dckUrl)
                             }
                             dockerUrl <<- dckUrl
