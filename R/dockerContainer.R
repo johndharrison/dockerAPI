@@ -25,7 +25,9 @@ dockerContainer <- setRefClass("dockerContainer",
                                methods = list(
                                  initialize = function(id = "", created = NULL, image = NULL, names = list(), ports = list(), status = NULL, command = NULL, ...){
                                    appports <- ports # fix note
-                                   if(ncol(appports[[1]]) == 0){appports[[1]] <- data.frame(IP = character(0), PrivatePort = numeric(0), PublicPort = numeric(0), Type = character(0))}
+                                   if(is.null(ncol(appports[[1]])) || ncol(appports[[1]]) == 0){
+                                     appports[[1]] <- data.frame(IP = character(0), PrivatePort = numeric(0), PublicPort = numeric(0), Type = character(0))
+                                   }
                                    id <<- id
                                    created <<- created
                                    image <<- image
@@ -168,11 +170,11 @@ dockerContainer <- setRefClass("dockerContainer",
                                    checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
                                  },
                                  
-                                 unpause = function(id){
+                                 unpause = function(){
                                    'Unpause the container.
                                    '
                                    dUrl <- dockerUrl
-                                   dUrl["path",] <- list("containers/{{appid}}/unpause")
+                                   dUrl["path"] <- list("containers/{{appid}}/unpause")
                                    appid <- id
                                    checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
                                  },
