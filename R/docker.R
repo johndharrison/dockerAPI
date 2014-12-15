@@ -1,3 +1,4 @@
+setOldClass("url")
 #' docker Class uses the 
 #' 
 #' docker is a generator object. 
@@ -11,18 +12,23 @@
 #' @aliases docker
 #' @examples
 #' \dontrun{
-#' docker <- docker(ip = "192.168.59.103", port = 2375L) # windows example
+#' docker <- docker("http://192.168.59.103:2375") # windows example
 #' docker$get()
 #' }
 
 docker <- setRefClass("docker",
                       contains = "errorHandler",
-                      fields = list(ip = "character",
-                                    port = "integer"),
+                      fields = list(dockerUrl = "url"),
                       methods = list(
-                        initialize = function(ip = "localhost", port = 2375L, ...){
-                          ip <<- ip
-                          port <<- as.integer(port) # pre-empt user
+                        initialize = function(dckUrl = NULL, ...){
+                          if(is.null(dckUrl)){
+                            dockerUrl <<- `class<-`(list(), "url")
+                          }else{
+                            if(!"url" %in% class(dUrl)){
+                              dckUrl <- parse_url(dckUrl)
+                            }
+                            dockerUrl <<- dckUrl
+                          }
                           callSuper(...)
                         },
                         getContainers = function(all = TRUE, limit = NULL, since = NULL, before = NULL, size = NULL){
@@ -34,11 +40,9 @@ docker <- setRefClass("docker",
                           \\item{\\code{before}:}{Show only containers created before Id, include non-running ones.}
                           \\item{\\code{size}:}{1/True/true or 0/False/false, Show the containers sizes}
                           }'
-                          dUrl <- list(scheme = "http", hostname = ip, port = port
-                                       , path = "containers/json", params = NULL
-                                       , fragment = NULL, query = list(all = all, limit = limit, since = since, before = before, size = size)
-                                       , username = NULL, password = NULL)
-                          class(dUrl) <- "url"
+                          dUrl <- dockerUrl
+                          dUrl[c("path", "query")] <- list("containers/json"
+                                                           , list(all = all, limit = limit, since = since, before = before, size = size))
                           checkResponse(GET(build_url(dUrl)), pass = c(200L))
                           res <- content(response, simplifyDataFrame = TRUE)
                           names(res) <- c("command", "created", "id", "image", "names", "ports", "status")
@@ -55,11 +59,9 @@ docker <- setRefClass("docker",
                           \\item{\\code{all}:}{1/True/true or 0/False/false, Show all images. Only running images are shown by default (i.e., this defaults to false)}
                           \\item{\\code{filters}:}{a json encoded value of the filters (a map[string][]string) to process on the images list.}
                            }'
-                          dUrl <- list(scheme = "http", hostname = ip, port = port
-                                       , path = "images/json", params = NULL
-                                       , fragment = NULL, query = list(all = all, filters = toJSON(filters))
-                                       , username = NULL, password = NULL)
-                          class(dUrl) <- "url"
+                          dUrl <- dockerUrl
+                          dUrl[c("path", "query")] <- list("images/json"
+                                                           , list(all = all, filters = toJSON(filters)))
                           checkResponse(GET(build_url(dUrl)), pass = c(200L))
                           res <- content(response, simplifyDataFrame = TRUE)
                           names(res) <- c("created", "id", "parentId", "repoTags", "size", "virtualSize")
@@ -82,13 +84,10 @@ docker <- setRefClass("docker",
                                 \\item{\\code{...}:}{Option to pass to \\code{\\link{verbose}}}
                                 }
                           '
-                          
-                          dUrl <- list(scheme = "http", hostname = ip, port = port
-                                       , path = "images/create", params = NULL
-                                       , fragment = NULL, query = list(fromImage = fromImage, fromSrc = fromSrc, repo = repo, tag = tag
-                                                                       , registry = registry, "X-Registry-Auth" = XRegistryAuth)
-                                       , username = NULL, password = NULL)
-                          class(dUrl) <- "url"
+                          dUrl <- dockerUrl
+                          dUrl[c("path", "query")] <- list("images/create"
+                                                           , list(fromImage = fromImage, fromSrc = fromSrc, repo = repo, tag = tag
+                                                                  , registry = registry, "X-Registry-Auth" = XRegistryAuth))
                           checkResponse(POST(build_url(dUrl), verbose(...)), pass = c(200L))
                           cat(content(response, "text"))
                         },
@@ -99,11 +98,9 @@ docker <- setRefClass("docker",
                           \\item{\\code{term}:}{Term to search.}
                           }'
                           if(missing(term)){stop("Please provide a search term", call. = FALSE)}
-                          dUrl <- list(scheme = "http", hostname = ip, port = port
-                                       , path = "/images/search", params = NULL
-                                       , fragment = NULL, query = list(term = term)
-                                       , username = NULL, password = NULL)
-                          class(dUrl) <- "url"
+                          dUrl <- dockerUrl
+                          dUrl[c("path", "query")] <- list("images/search"
+                                                           , list(term = term))
                           checkResponse(GET(build_url(dUrl)), pass = c(200L))
                           content(response, simplifyDataFrame = TRUE)
                         }
