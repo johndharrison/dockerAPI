@@ -14,11 +14,20 @@ dockerContainer is a generator object.
 \item{\code{export(Class)}}{Returns the result of coercing the object to
 Class.  No effect on the object itself.}
 
-\item{\code{fsChanges()}}{Inspect changes on containers filesystem.}
+\item{\code{fsChanges(...)}}{Inspect changes on containers filesystem.
+ \describe{
+  \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+ }}
 
-\item{\code{inspect()}}{Return low-level information on the container.}
+\item{\code{inspect(...)}}{Return low-level information on the container.
+ \describe{
+ \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+ }}
 
-\item{\code{kill()}}{Kill the container.}
+\item{\code{kill(...)}}{Kill the container.
+\describe{
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+}}
 
 \item{\code{listProcesses(ps_args = NULL)}}{List processes running inside the container.
 \describe{
@@ -33,7 +42,10 @@ Class.  No effect on the object itself.}
 \item{\code{tail}:}{Output specified number of lines at the end of logs: all or <number>. Default all}
 }}
 
-\item{\code{pause()}}{Pause the container}
+\item{\code{pause(...)}}{Pause the container
+\describe{
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+}}
 
 \item{\code{remove(force = FALSE, v = FALSE)}}{Create an image, either by pulling it from the registry or by importing it.
 \describe{
@@ -79,7 +91,10 @@ Class.  No effect on the object itself.}
  \item{\code{t}:}{number of seconds to wait before killing the container.}
 }}
 
-\item{\code{unpause()}}{Unpause the container.}
+\item{\code{unpause(...)}}{Unpause the container.
+\describe{
+ \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+}}
 }}
 \examples{
 \dontrun{

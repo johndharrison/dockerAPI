@@ -38,13 +38,16 @@ dockerContainer <- setRefClass("dockerContainer",
                                    callSuper(...)
                                  },
                                  
-                                 inspect = function(){
+                                 inspect = function(...){
                                    'Return low-level information on the container.
-                          '
+                                    \\describe{
+                                    \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                                    }
+                                   '
                                    dUrl <- dockerUrl
                                    dUrl["path"] <- list("containers/{{appid}}/json")
                                    appid <- id
-                                   checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
+                                   checkResponse(GET(whisker.render(build_url(dUrl)), ...), pass = c(200L))
                                    content(response, simplifyDataFrame = TRUE)
                                  },
                                  
@@ -81,13 +84,16 @@ dockerContainer <- setRefClass("dockerContainer",
                                    capture.output(cat(rawToChar(out[!out == as.raw(0)])))
                                  },
                                  
-                                 fsChanges = function(){
+                                 fsChanges = function(...){
                                    'Inspect changes on containers filesystem.
+                                    \\describe{
+                                     \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                                    }
                                    '
                                    dUrl <- dockerUrl
                                    dUrl["path"] <- list("containers/{{appid}}/changes")
                                    appid <- id
-                                   checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
+                                   checkResponse(GET(whisker.render(build_url(dUrl)), ...), pass = c(200L))
                                    content(response, simplifyDataFrame = TRUE)
                                  },
                                  
@@ -152,31 +158,40 @@ dockerContainer <- setRefClass("dockerContainer",
                                    checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
                                  },
                                  
-                                 kill = function(){
+                                 kill = function(...){
                                    'Kill the container.
+                                   \\describe{
+                                   \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                                   }
                                    '
                                    dUrl <- dockerUrl
                                    dUrl["path"] <- list("containers/{{appid}}/kill")
                                    appid <- id
-                                   checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
+                                   checkResponse(POST(whisker.render(build_url(dUrl)), ...), pass = c(204L))
                                  },
                                  
-                                 pause = function(){
+                                 pause = function(...){
                                    'Pause the container
+                                   \\describe{
+                                   \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                                   }
                                    '
                                    dUrl <- dockerUrl
                                    dUrl["path"] <- list("containers/{{appid}}/pause")
                                    appid <- id
-                                   checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
+                                   checkResponse(POST(whisker.render(build_url(dUrl)), ...), pass = c(204L))
                                  },
                                  
-                                 unpause = function(){
+                                 unpause = function(...){
                                    'Unpause the container.
+                                   \\describe{
+                                    \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                                   }
                                    '
                                    dUrl <- dockerUrl
                                    dUrl["path"] <- list("containers/{{appid}}/unpause")
                                    appid <- id
-                                   checkResponse(POST(whisker.render(build_url(dUrl))), pass = c(204L))
+                                   checkResponse(POST(whisker.render(build_url(dUrl)), ...), pass = c(204L))
                                  },
                                  
                                  remove = function(force = FALSE, v = FALSE){
