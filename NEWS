@@ -1,0 +1,3 @@
+# dockerAPI 0.1.0
+* Add support for TLS etc. passing relevant parameters through to httr.
+* Add example of TLS under windows.
