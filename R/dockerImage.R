@@ -35,37 +35,44 @@ dockerImage <- setRefClass("dockerImage",
                                name <<- unique(sapply(strsplit(unlist(repoTags), ":"), "[", 1))
                              },
                              
-                             inspect = function(){
+                             inspect = function(...){
                                'Return low-level information on the image.
-                          '
+                               \\describe{
+                                \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                               }
+                               '
                                dUrl <- dockerUrl
                                dUrl["path"] <- list("images/{{appname}}/json")
                                appname <- name
-                               checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
+                               checkResponse(GET(whisker.render(build_url(dUrl)), ...), pass = c(200L))
                                content(response, simplifyDataFrame = TRUE)
                              },
                              
-                             history = function(){
-                               'Return the history of the image.'
+                             history = function(...){
+                               'Return the history of the image.
+                               \\describe{
+                                \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                               }'
                                dUrl <- dockerUrl
                                dUrl["path"] <- list("images/{{appname}}/history")
                                appname <- name
-                               checkResponse(GET(whisker.render(build_url(dUrl))), pass = c(200L))
+                               checkResponse(GET(whisker.render(build_url(dUrl)), ...), pass = c(200L))
                                content(response, simplifyDataFrame = TRUE)
                              },
                              
-                             remove = function(force = FALSE, noprune = FALSE){
+                             remove = function(force = FALSE, noprune = FALSE, ...){
                                'Remove an image
                                \\describe{
                                 \\item{\\code{force}:}{1/True/true or 0/False/false, default false.}
                                 \\item{\\code{noprune}:}{1/True/true or 0/False/false, default false.}
+                                \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                                 }'
                                
                                dUrl <- dockerUrl
                                dUrl[c("path", "query")] <- list("images/{{appname}}"
                                                                 , list(force = force, noprune = noprune))
                                appname <- name
-                               checkResponse(DELETE(whisker.render(build_url(dUrl))), pass = c(200L))
+                               checkResponse(DELETE(whisker.render(build_url(dUrl)), ...), pass = c(200L))
                                content(response, simplifyDataFrame = TRUE)
                              }
                              
