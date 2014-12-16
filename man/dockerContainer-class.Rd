@@ -29,17 +29,20 @@ Class.  No effect on the object itself.}
 \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
-\item{\code{listProcesses(ps_args = NULL)}}{List processes running inside the container.
+\item{\code{listProcesses(ps_args = NULL, ...)}}{List processes running inside the container.
 \describe{
 \item{\code{ps_args}:}{ps arguments to use (e.g., aux). docker os dependent see \url{https://github.com/docker/docker/issues/8075}}
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
-\item{\code{logs(stdout = FALSE, stderr = FALSE, timestamps = FALSE, tail = "all")}}{Get stdout and stderr logs from the container.
+\item{\code{logs(stdout = FALSE, stderr = FALSE, timestamps = FALSE, tail = "all",
+  ...)}}{Get stdout and stderr logs from the container.
 \describe{
 \item{\code{stdout}:}{1/True/true or 0/False/false, show stdout log. Default false}
 \item{\code{stderr}:}{1/True/true or 0/False/false, show stderr log. Default false}
 \item{\code{timestamps}:}{1/True/true or 0/False/false, print timestamps for every log line. Default false}
 \item{\code{tail}:}{Output specified number of lines at the end of logs: all or <number>. Default all}
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
 \item{\code{pause(...)}}{Pause the container
@@ -47,28 +50,31 @@ Class.  No effect on the object itself.}
 \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
-\item{\code{remove(force = FALSE, v = FALSE)}}{Create an image, either by pulling it from the registry or by importing it.
+\item{\code{remove(force = FALSE, v = FALSE, ...)}}{Create an image, either by pulling it from the registry or by importing it.
 \describe{
 \item{\code{force}:}{1/True/true or 0/False/false, default false.}
 \item{\code{v}:}{1/True/true or 0/False/false, Remove the volumes associated to the container. Default false}
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
-\item{\code{resize(height = NULL, width = NULL)}}{Resize the TTY of the container.
+\item{\code{resize(height = NULL, width = NULL, ...)}}{Resize the TTY of the container.
 \describe{
 \item{\code{height}:}{Height for the resized container.}
 \item{\code{width}:}{Width for the resized container.}
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
-\item{\code{restart(t = NULL)}}{Restart the container.
+\item{\code{restart(t = NULL, ...)}}{Restart the container.
 \describe{
  \item{\code{t}:}{number of seconds to wait before killing the container.}
+ \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
 \item{\code{start(Binds = NULL, Links = NULL, LxcConf = NULL, PortBindings = NULL,
   PublishAllPorts = FALSE, Privileged = FALSE, Dns = NULL,
   DnsSearch = NULL, VolumesFrom = NULL, CapAdd = NULL, Capdrop = NULL,
   RestartPolicy = "\\"Name\\": \\"on-failure\\"", NetworkMode = "Bridge",
-  Devices = NULL)}}{Start the container id
+  Devices = NULL, ...)}}{Start the container id
 \describe{
 \item{\code{Binds}:}{ A list of volume bindings for this container. Each volume binding is a string of the form container_path (to create a new volume for the container), host_path:container_path (to bind-mount a host path into the container), or host_path:container_path:ro (to make the bind-mount read-only inside the container).}
 \item{\code{Links}:}{A list of links for the container. Each link entry should be of of the form "container_name:alias"}
@@ -84,11 +90,13 @@ Class.  No effect on the object itself.}
 \item{\code{RestartPolicy}:}{The behavior to apply when the container exits. The value is an object with a Name property of either "always" to always restart or "on-failure" to restart only when the container exit code is non-zero. If on-failure is used, MaximumRetryCount controls the number of times to retry before giving up. The default is not to restart. (optional)}
 \item{\code{NetworkMode}:}{Sets the networking mode for the container. Supported values are: bridge, host, and container:<name|id>}
 \item{\code{Devices}:}{A list of devices to add to the container specified in the form { "PathOnHost": "/dev/deviceName", "PathInContainer": "/dev/deviceName", "CgroupPermissions": "mrw"}}
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
-\item{\code{stop(t = NULL)}}{Stop the container.
+\item{\code{stop(t = NULL, ...)}}{Stop the container.
 \describe{
  \item{\code{t}:}{number of seconds to wait before killing the container.}
+ \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
 \item{\code{unpause(...)}}{Unpause the container.
