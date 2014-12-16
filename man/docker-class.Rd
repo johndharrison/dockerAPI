@@ -20,8 +20,8 @@ docker is a generator object.
       \item{\code{tag}:}{Tag}
       \item{\code{registry}:}{Registry}
       \item{\code{XRegistryAuth}:}{Base64-encoded AuthConfig object.}
-      \item{\code{...}:}{Option to pass to \code{\link{verbose}}}
-      }}
+      \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+     }}
 
 \item{\code{getContainers(all = TRUE, limit = NULL, since = NULL, before = NULL,
   size = NULL, ...)}}{List containers:
@@ -34,15 +34,17 @@ docker is a generator object.
 \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
-\item{\code{getImages(all = FALSE, filters = NULL)}}{List images:
+\item{\code{getImages(all = FALSE, filters = NULL, ...)}}{List images:
 \describe{
 \item{\code{all}:}{1/True/true or 0/False/false, Show all images. Only running images are shown by default (i.e., this defaults to false)}
 \item{\code{filters}:}{a json encoded value of the filters (a map[string][]string) to process on the images list.}
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
  }}
 
-\item{\code{searchImages(term)}}{List images:
+\item{\code{searchImages(term, ...)}}{List images:
 \describe{
 \item{\code{term}:}{Term to search.}
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 }}
 \examples{

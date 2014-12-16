@@ -61,16 +61,17 @@ docker <- setRefClass("docker",
                           `class<-`(containers, "containerList")
                         },
                         
-                        getImages = function(all = FALSE, filters = NULL){
+                        getImages = function(all = FALSE, filters = NULL, ...){
                           'List images:
                           \\describe{
                           \\item{\\code{all}:}{1/True/true or 0/False/false, Show all images. Only running images are shown by default (i.e., this defaults to false)}
                           \\item{\\code{filters}:}{a json encoded value of the filters (a map[string][]string) to process on the images list.}
+                          \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                            }'
                           dUrl <- dockerUrl
                           dUrl[c("path", "query")] <- list("images/json"
                                                            , list(all = all, filters = toJSON(filters)))
-                          checkResponse(GET(build_url(dUrl)), pass = c(200L))
+                          checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
                           res <- content(response, simplifyDataFrame = TRUE)
                           names(res) <- c("created", "id", "parentId", "repoTags", "size", "virtualSize")
                           res$created <- as.POSIXct(res$created, origin = "1970-01-01")
@@ -89,27 +90,28 @@ docker <- setRefClass("docker",
                                 \\item{\\code{tag}:}{Tag}
                                 \\item{\\code{registry}:}{Registry}
                                 \\item{\\code{XRegistryAuth}:}{Base64-encoded AuthConfig object.}
-                                \\item{\\code{...}:}{Option to pass to \\code{\\link{verbose}}}
-                                }
+                                \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                               }
                           '
                           dUrl <- dockerUrl
                           dUrl[c("path", "query")] <- list("images/create"
                                                            , list(fromImage = fromImage, fromSrc = fromSrc, repo = repo, tag = tag
                                                                   , registry = registry, "X-Registry-Auth" = XRegistryAuth))
-                          checkResponse(POST(build_url(dUrl), verbose(...)), pass = c(200L))
+                          checkResponse(POST(build_url(dUrl), ...), pass = c(200L))
                           cat(content(response, "text"))
                         },
                         
-                        searchImages = function(term){
+                        searchImages = function(term, ...){
                           'List images:
                           \\describe{
                           \\item{\\code{term}:}{Term to search.}
+                          \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                           }'
                           if(missing(term)){stop("Please provide a search term", call. = FALSE)}
                           dUrl <- dockerUrl
                           dUrl[c("path", "query")] <- list("images/search"
                                                            , list(term = term))
-                          checkResponse(GET(build_url(dUrl)), pass = c(200L))
+                          checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
                           content(response, simplifyDataFrame = TRUE)
                         }
                       )
