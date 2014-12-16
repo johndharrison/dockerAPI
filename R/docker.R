@@ -115,6 +115,51 @@ docker <- setRefClass("docker",
                                                            , list(term = term))
                           checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
                           content(response, simplifyDataFrame = TRUE)
+                        },
+                        
+                        checkAuth = function(...){
+                          'Get the default username and email:
+                          \\describe{
+                          \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                        }'
+                          dUrl <- dockerUrl
+                          dUrl["path"] <- list("auth")
+                          checkResponse(POST(build_url(dUrl), ...), pass = c(200L))
+                          content(response, simplifyDataFrame = TRUE)
+                          
+                        },
+                        
+                        info = function(...){
+                          'Display system-wide information:
+                          \\describe{
+                          \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                          }'
+                          dUrl <- dockerUrl
+                          dUrl["path"] <- list("info")
+                          checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
+                          content(response, simplifyDataFrame = TRUE)
+                        },
+                        
+                        version = function(...){
+                          'Show the docker version information:
+                          \\describe{
+                          \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                          }'
+                          dUrl <- dockerUrl
+                          dUrl["path"] <- list("version")
+                          checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
+                          content(response, simplifyDataFrame = TRUE)
+                        },
+                        
+                        ping = function(...){
+                          'Ping the docker server:
+                          \\describe{
+                          \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                          }'
+                          dUrl <- dockerUrl
+                          dUrl["path"] <- list("_ping")
+                          checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
+                          content(response)
                         }
                       )
 )

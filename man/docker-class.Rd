@@ -11,6 +11,11 @@ docker is a generator object.
 \section{Methods}{
 
 \describe{
+\item{\code{checkAuth(...)}}{Get the default username and email:
+  \describe{
+  \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+}}
+
 \item{\code{createImage(fromImage, fromSrc = NULL, repo = NULL, tag = NULL,
   registry = NULL, XRegistryAuth = NULL, ...)}}{Create an image, either by pulling it from the registry or by importing it.
      \describe{
@@ -41,9 +46,24 @@ docker is a generator object.
 \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
  }}
 
+\item{\code{info(...)}}{Display system-wide information:
+\describe{
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+}}
+
+\item{\code{ping(...)}}{Ping the docker server:
+\describe{
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+}}
+
 \item{\code{searchImages(term, ...)}}{List images:
 \describe{
 \item{\code{term}:}{Term to search.}
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+}}
+
+\item{\code{version(...)}}{Show the docker version information:
+\describe{
 \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 }}
