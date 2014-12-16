@@ -24,13 +24,14 @@ docker is a generator object.
       }}
 
 \item{\code{getContainers(all = TRUE, limit = NULL, since = NULL, before = NULL,
-  size = NULL)}}{List containers:
+  size = NULL, ...)}}{List containers:
 \describe{
 \item{\code{all}:}{1/True/true or 0/False/false, Show all containers. Only running containers are shown by default (i.e., this defaults to false)}
 \item{\code{limit}:}{Show limit last created containers, include non-running ones.}
 \item{\code{since}:}{Show only containers created since Id, include non-running ones.}
 \item{\code{before}:}{Show only containers created before Id, include non-running ones.}
 \item{\code{size}:}{1/True/true or 0/False/false, Show the containers sizes}
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
 \item{\code{getImages(all = FALSE, filters = NULL)}}{List images:
@@ -47,7 +48,14 @@ docker is a generator object.
 \examples{
 \dontrun{
 docker <- docker("http://192.168.59.103:2375") # windows example
-docker$get()
+docker$getContainers()
+
+# TLS example:
+dckr <- docker("https://192.168.59.103:2376")
+# Note the location of your certs.
+dckr$getContainers(config = httr::config(sslcert = "../../certs/cert.pem"
+                   , sslkey = "../../certs/key.pem"
+                   , sslversion=1L, ssl.verifypeer = FALSE))
 }
 }
 
