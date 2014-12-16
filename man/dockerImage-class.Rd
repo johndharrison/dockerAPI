@@ -11,14 +11,21 @@ dockerImage is a generator object.
 \section{Methods}{
 
 \describe{
-\item{\code{history()}}{Return the history of the image.}
+\item{\code{history(...)}}{Return the history of the image.
+\describe{
+ \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+}}
 
-\item{\code{inspect()}}{Return low-level information on the image.}
+\item{\code{inspect(...)}}{Return low-level information on the image.
+\describe{
+ \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+}}
 
-\item{\code{remove(force = FALSE, noprune = FALSE)}}{Remove an image
+\item{\code{remove(force = FALSE, noprune = FALSE, ...)}}{Remove an image
 \describe{
  \item{\code{force}:}{1/True/true or 0/False/false, default false.}
  \item{\code{noprune}:}{1/True/true or 0/False/false, default false.}
+ \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
  }}
 }}
 \examples{
