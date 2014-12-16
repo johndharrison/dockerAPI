@@ -1,7 +1,7 @@
 Package: dockerAPI
 Type: Package
 Title: R Bindings for the Docker API
-Version: 0.0.6
+Version: 0.1.0
 Date: 2014-12-01
 Author: John Harrison <johndharrison0@gmail.com>
 Maintainer: John Harrison <johndharrison0@gmail.com>
@@ -15,7 +15,6 @@ Collate:
     'containerList.R'
     'errorHandler.R'
     'docker.R'
-    'dockerAPI.R'
     'dockerContainer.R'
     'dockerImage.R'
     'imageList.R'
