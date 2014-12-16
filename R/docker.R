@@ -18,9 +18,11 @@ setOldClass("url")
 #' # TLS example:
 #' dckr <- docker("https://192.168.59.103:2376")
 #' # Note the location of your certs.
-#' dckr$getContainers(config = httr::config(sslcert = "../../certs/cert.pem"
+#' myConfig = httr::config(sslcert = "../../certs/cert.pem"
 #'                    , sslkey = "../../certs/key.pem"
-#'                    , sslversion=1L, ssl.verifypeer = FALSE)) 
+#'                    , sslversion=1L, ssl.verifypeer = FALSE)
+#' dckr$getContainers(config = myConfig)
+#' dckr$searchImages("rstudio", config = myConfig)
 #' }
 
 docker <- setRefClass("docker",
