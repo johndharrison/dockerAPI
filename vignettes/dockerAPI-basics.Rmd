@@ -1,0 +1,10 @@
+---
+title: "dockerAPI Basics"
+author: "John Harrison"
+date: "17/12/2014"
+output: html_document
+---
+
+## Introduction
+
+The goal of dockerAPI is to provide an R client for the docker Remote API. 
