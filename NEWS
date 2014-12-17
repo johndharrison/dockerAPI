@@ -1,3 +1,7 @@
+# dockerAPI 0.1.1
+* Overload $ operator for imageList class and allow tab completion.
+* A basic vignette dockerAPI-basic contains information on getting started.
+
 # dockerAPI 0.1.0
 * Add support for TLS etc. passing relevant parameters through to httr.
 * Add example of TLS under windows.
