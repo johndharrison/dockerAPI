@@ -39,6 +39,8 @@
 </ul></li>
 <li><a href="#docker-basics">Docker basics</a><ul>
 <li><a href="#connecting-to-the-docker-daemon">Connecting to the docker daemon</a></li>
+<li><a href="#the-docker-class">The docker class</a></li>
+<li><a href="#interacting-with-the-daemon.">Interacting with the daemon.</a></li>
 </ul></li>
 </ul>
 </div>
@@ -57,7 +59,7 @@
 </div>
 <div id="installing-docker" class="section level2">
 <h2>Installing docker</h2>
-<p>Docker is available for a wide range of platforms. dockerAPI has been tested on Windows, Linux and Mac OS X. Windows and Mac OS X currently both require a helper application <a href="https://github.com/boot2docker/boot2docker">boot2docker</a> to run docker. dockerAPI has been mostly tested on Ubuntu Linux. For detailed instructions on installing docker for your platform please see the <a href="https://docs.docker.com/installation/#installation">installation guides</a>.</p>
+<p>Docker is available for a wide range of platforms. dockerAPI has been tested on Windows, Linux and Mac OS X. Windows and Mac OS X currently both require a helper application <a href="https://github.com/boot2docker/boot2docker">boot2docker</a> to run docker. dockerAPI has been mostly tested on Ubuntu Linux. For detailed instructions on installing docker for your platform please see the <a href="https://docs.docker.com/installation/#installation">installation guides</a>. <strong>docker version 1.4, docker Remote API version 1.16 or greater is assumed.</strong></p>
 </div>
 </div>
 <div id="docker-basics" class="section level1">
@@ -71,7 +73,53 @@ Writing c:\Users\john\.docker\boot2docker-vm\cert.pem:
 Writing c:\Users\john\.docker\boot2docker-vm\key.pem:
     export DOCKER_HOST=tcp://192.168.59.103:2376
     export DOCKER_CERT_PATH=c:\Users\john\.docker\boot2docker-vm</code></pre>
-<p>gives information on the location of the certs and the relevant docker ip. It is straightforward to change these defaults. For example to secure the Linux docker Remote API see <a href="http://blog.james-carr.org/2013/10/30/securing-dockers-remote-api/">here</a>. For most of this guide we will assume we are connecting to a windows boot2docker variant over TLS. This is usually the most problematic platform and it will require us to authenticate which is useful for illustration. Windows, Mac OS X, Linux is how I would percieve the order of the OS’s in terms of problems running docker.</p>
+<p>gives information on the location of the certs and the relevant docker ip. It is straightforward to change these defaults. For example to secure the Linux docker Remote API see <a href="http://blog.james-carr.org/2013/10/30/securing-dockers-remote-api/">here</a>. <strong>For most of this guide we will assume we are connecting to a windows boot2docker variant over TLS. This is usually the most problematic platform and it will require us to authenticate which is useful for illustration. Windows, Mac OS X, Linux is how I would perceive the order of the OS’s in terms of problems running docker. If you have authentication turned off you can remove the <code>config = myConfig</code> references you will see that follows from the relevant methods. </strong></p>
+</div>
+<div id="the-docker-class" class="section level2">
+<h2>The docker class</h2>
+<p>The <code>dockerAPI</code> package contains a number of reference classes that will enable us to interact with the docker Remote API. The first such class we encounter is the <code>docker</code> class. The docker class is initialised by passing it a string of the docker host url or a <code>httr</code> object of class <code>url</code>. Class <code>url</code> is a named list giving information on the url (scheme, hostname, path etc.). For our windows based boot2docker example we would initialise our <code>docker</code> class as</p>
+<pre><code>dckr &lt;- docker(&quot;https://192.168.59.103:2376)
+myConfig &lt;- httr::config(sslcert = &quot;../../certs/cert.pem&quot;
+                         , sslkey = &quot;../../certs/key.pem&quot;
+                         , sslversion=1L, ssl.verifypeer = FALSE)</code></pre>
+<p>The additional setup in <code>myConfig</code> is typically what we would need for SSL/TLS authentication. <code>sslcert</code> and <code>sslkey</code> point to the location of the cert and key. In this case <code>sslversion=1L</code> states that we are using TLS and <code>ssl.verifypeer = FALSE</code> means our cert is signed and for libcurl to ignore this fact. The path to my certs dont match the output from <code>boot2docker shellinit</code> as I am actually accessing the windows machine running docker from another virtual machine and have just copied the cert and key across.</p>
+</div>
+<div id="interacting-with-the-daemon." class="section level2">
+<h2>Interacting with the daemon.</h2>
+<p>The docker class has a number of informative methods that we will look at. Firstly lets check that we can connect to the docker server. There is a <code>ping</code> method:</p>
+<pre><code>&gt; dckr$ping(config = myConfig)
+[1] &quot;OK&quot;
+</code></pre>
+<p>which helpfully indicates everything is as expected. We can get system-wide information using the <code>info</code> method:</p>
+<pre><code>&gt; dckr$info(config = myConfig)[c(&quot;Name&quot;, &quot;OperatingSystem&quot;)]
+$Name
+[1] &quot;boot2docker&quot;
+
+$OperatingSystem
+[1] &quot;Boot2Docker 1.4.0 (TCL 5.4); master : 69cf398 - Fri Dec 12 01:15:02 UTC 2014&quot;
+</code></pre>
+<p>which returns a wide range of information two components of which we highlight here. So we see that the docker machine we are connecting to herre is running <code>boot2docker</code> and the docker version is <code>1.4.0</code>. Finally we can call the <code>version</code> method for more detail on the setup:</p>
+<pre><code>&gt; dckr$version(config = myConfig)
+$ApiVersion
+[1] &quot;1.16&quot;
+
+$Arch
+[1] &quot;amd64&quot;
+
+$GitCommit
+[1] &quot;4595d4f&quot;
+
+$GoVersion
+[1] &quot;go1.3.3&quot;
+
+$KernelVersion
+[1] &quot;3.16.7-tinycore64&quot;
+
+$Os
+[1] &quot;linux&quot;
+
+$Version
+[1] &quot;1.4.0&quot;</code></pre>
 </div>
 </div>
 

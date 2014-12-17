@@ -34,7 +34,7 @@ devtools::install_github("johndharrison/dockerAPI")
 
 ## Installing docker
 
-Docker is available for a wide range of platforms. dockerAPI has been tested on Windows, Linux and Mac OS X. Windows and Mac OS X currently both require a helper application [boot2docker](https://github.com/boot2docker/boot2docker) to run docker. dockerAPI has been mostly tested on Ubuntu Linux. For detailed instructions on installing docker for your platform please see the [installation guides](https://docs.docker.com/installation/#installation). 
+Docker is available for a wide range of platforms. dockerAPI has been tested on Windows, Linux and Mac OS X. Windows and Mac OS X currently both require a helper application [boot2docker](https://github.com/boot2docker/boot2docker) to run docker. dockerAPI has been mostly tested on Ubuntu Linux. For detailed instructions on installing docker for your platform please see the [installation guides](https://docs.docker.com/installation/#installation). **docker version 1.4, docker Remote API version 1.16 or greater is assumed.**
 
 
 # Docker basics
@@ -52,4 +52,70 @@ Writing c:\Users\john\.docker\boot2docker-vm\key.pem:
     export DOCKER_CERT_PATH=c:\Users\john\.docker\boot2docker-vm
 ```
 
-gives information on the location of the certs and the relevant docker ip. It is straightforward to change these defaults. For example to secure the Linux docker Remote API see [here](http://blog.james-carr.org/2013/10/30/securing-dockers-remote-api/). For most of this guide we will assume we are connecting to a windows boot2docker variant over TLS. This is usually the most problematic platform and it will require us to authenticate which is useful for illustration. Windows, Mac OS X, Linux is how I would percieve the order of the OS's in terms of problems running docker. 
+gives information on the location of the certs and the relevant docker ip. It is straightforward to change these defaults. For example to secure the Linux docker Remote API see [here](http://blog.james-carr.org/2013/10/30/securing-dockers-remote-api/). **For most of this guide we will assume we are connecting to a windows boot2docker variant over TLS. This is usually the most problematic platform and it will require us to authenticate which is useful for illustration. Windows, Mac OS X, Linux is how I would perceive the order of the OS's in terms of problems running docker. If you have authentication turned off you can remove the `config = myConfig` references you will see that follows from the relevant methods. ** 
+
+## The docker class
+
+The `dockerAPI` package contains a number of reference classes that will enable us to interact with the docker Remote API. The first such class we encounter is the `docker` class. The docker class is initialised by passing it a string of the docker host url or a `httr` object of class `url`. Class `url` is a named list giving information on the url (scheme, hostname, path etc.).
+For our windows based boot2docker example we would initialise our `docker` class as
+
+```
+dckr <- docker("https://192.168.59.103:2376)
+myConfig <- httr::config(sslcert = "../../certs/cert.pem"
+                         , sslkey = "../../certs/key.pem"
+                         , sslversion=1L, ssl.verifypeer = FALSE)
+```
+
+The additional setup in `myConfig` is typically what we would need for SSL/TLS authentication. `sslcert` and `sslkey` point to the location of the cert and key. In this case `sslversion=1L` states that we are using TLS and `ssl.verifypeer = FALSE` means our cert is signed and for libcurl to ignore this fact. The path to my certs dont match the output from `boot2docker shellinit` as I am actually accessing the windows machine running docker from another virtual machine and have just copied the cert and key across. 
+
+## Interacting with the daemon.
+
+The docker class has a number of informative methods that we will look at. 
+Firstly lets check that we can connect to the docker server. There is a `ping` method:
+
+```
+> dckr$ping(config = myConfig)
+[1] "OK"
+
+```
+
+which helpfully indicates everything is as expected. We can get system-wide information using the
+`info` method:
+
+```
+> dckr$info(config = myConfig)[c("Name", "OperatingSystem")]
+$Name
+[1] "boot2docker"
+
+$OperatingSystem
+[1] "Boot2Docker 1.4.0 (TCL 5.4); master : 69cf398 - Fri Dec 12 01:15:02 UTC 2014"
+
+```
+
+which returns a wide range of information two components of which we highlight here. So we see that the docker machine we are connecting to herre is running `boot2docker` and the docker version is `1.4.0`. Finally we can call the `version` method for more detail on the setup:
+
+```
+> dckr$version(config = myConfig)
+$ApiVersion
+[1] "1.16"
+
+$Arch
+[1] "amd64"
+
+$GitCommit
+[1] "4595d4f"
+
+$GoVersion
+[1] "go1.3.3"
+
+$KernelVersion
+[1] "3.16.7-tinycore64"
+
+$Os
+[1] "linux"
+
+$Version
+[1] "1.4.0"
+```
+
+
