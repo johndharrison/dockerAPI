@@ -55,6 +55,7 @@ docker <- setRefClass("docker",
                                                            , list(all = all, limit = limit, since = since, before = before, size = size))
                           checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
                           res <- content(response, simplifyDataFrame = TRUE)
+                          if(identical(res, list())){return(res)}
                           names(res) <- c("command", "created", "id", "image", "names", "ports", "status")
                           res$created <- as.POSIXct(res$created, origin = "1970-01-01")
                           containers <- lapply(seq(nrow(res)), function(x){
@@ -75,6 +76,7 @@ docker <- setRefClass("docker",
                                                            , list(all = all, filters = toJSON(filters)))
                           checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
                           res <- content(response, simplifyDataFrame = TRUE)
+                          if(identical(res, list())){return(res)}
                           names(res) <- c("created", "id", "parentId", "repoTags", "size", "virtualSize")
                           res$created <- as.POSIXct(res$created, origin = "1970-01-01")
                           containers <- lapply(seq(nrow(res)), function(x){
