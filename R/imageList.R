@@ -25,3 +25,13 @@ print.imageList <- function(x, ...){
   }
   
 }
+
+#' @export
+`$.imageList` <- function(x, name){
+  x[, name]
+}
+
+#' @export
+.DollarNames.imageList <- function(x, pattern){
+  grep(pattern, names(rbind(x)), value=TRUE)
+}
