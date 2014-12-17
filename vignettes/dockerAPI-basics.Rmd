@@ -2,17 +2,54 @@
 title: "dockerAPI Basics"
 author: "John Harrison"
 date: "17/12/2014"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{dockerAPI Basics}
 output: 
-  html_document
-    theme: cerulean
+  knitr:::html_vignette:
     toc: yes
 ---
 
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{dockerAPI Basics}
--->
+# Introduction
 
-## Introduction
+The goal of dockerAPI is to provide an R client for the docker Remote API. Docker is an open platform for developing, shipping, and running applications. Docker is designed to deliver your applications faster. With Docker you can separate your applications from your infrastructure AND treat your infrastructure like a managed application. 
 
-The goal of dockerAPI is to provide an R client for the docker Remote API. 
+Docker does this by combining a lightweight container virtualization platform with workflows and tooling that help you manage and deploy your applications. We will mainly be looking at three components of docker namely registries, images and containers. Registries contain images, images contain containers and containers encompass everything needed for an applications that docker runs.
+
+The docker Remote API allows us to interact with registries, images and containers both locally and remotely by way of a mostly RESTFUL API. For more details on docker read [Understanding Docker](https://docs.docker.com/introduction/understanding-docker/).
+
+## Installation
+
+To install dockerAPI from CRAN use
+
+```
+install.packages("dockerAPI")
+```
+
+To get the latest development version of dockerAPI use
+
+```
+devtools::install_github("johndharrison/dockerAPI")
+```
+
+## Installing docker
+
+Docker is available for a wide range of platforms. dockerAPI has been tested on Windows, Linux and Mac OS X. Windows and Mac OS X currently both require a helper application [boot2docker](https://github.com/boot2docker/boot2docker) to run docker. dockerAPI has been mostly tested on Ubuntu Linux. For detailed instructions on installing docker for your platform please see the [installation guides](https://docs.docker.com/installation/#installation). 
+
+
+# Docker basics
+
+## Connecting to the docker daemon
+
+On Linux the daemon listens on `unix:///var/run/docker.sock` but you can [Bind Docker to another host/port or a Unix socket](https://docs.docker.com/articles/basics/#bind-docker-to-another-hostport-or-a-unix-socket). On boot2docker (Windows and Mac OS X) the daemon listens on tcp with TLS enabled. Running
+
+```
+$ boot2docker shellinit
+Writing c:\Users\john\.docker\boot2docker-vm\ca.pem:
+Writing c:\Users\john\.docker\boot2docker-vm\cert.pem:
+Writing c:\Users\john\.docker\boot2docker-vm\key.pem:
+    export DOCKER_HOST=tcp://192.168.59.103:2376
+    export DOCKER_CERT_PATH=c:\Users\john\.docker\boot2docker-vm
+```
+
+gives information on the location of the certs and the relevant docker ip. It is straightforward to change these defaults. For example to secure the Linux docker Remote API see [here](http://blog.james-carr.org/2013/10/30/securing-dockers-remote-api/). For most of this guide we will assume we are connecting to a windows boot2docker variant over TLS. This is usually the most problematic platform and it will require us to authenticate which is useful for illustration. Windows, Mac OS X, Linux is how I would percieve the order of the OS's in terms of problems running docker. 
