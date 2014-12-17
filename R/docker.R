@@ -83,7 +83,8 @@ docker <- setRefClass("docker",
                           `class<-`(containers, "imageList")
                         },
                         
-                        createImage = function(fromImage, fromSrc = NULL, repo = NULL, tag = NULL, registry = NULL, XRegistryAuth = NULL, ...){
+                        createImage = function(fromImage, fromSrc = NULL, repo = NULL, tag = NULL
+                                               , registry = NULL, XRegistryAuth = NULL, ...){
                           'Create an image, either by pulling it from the registry or by importing it.
                                \\describe{
                                 \\item{\\code{fromImage}:}{Name of the image to pull.}
