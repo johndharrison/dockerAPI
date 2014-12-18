@@ -44,6 +44,15 @@ docker <- setRefClass("docker",
                           dockerConf <<- dckrConf
                           callSuper(...)
                         },
+                        
+                        buildREST = function(dUrl = dockerUrl, urlComp, httpMethod, renderDF = data.frame(), pass = c(200L), errors = c(), ...){
+                          curlOpts <- list(...)
+                          curlOpts$config = c(dockerConf, curlOpts$config)
+                          dUrl[names(urlComp)] <- urlComp
+                          appUrl <- whisker.render(build_url(dUrl), renderDF)
+                          checkResponse(do.call(httpMethod, c(appUrl, curlOpts)), pass = pass, errors = errors)
+                        },
+                        
                         getContainers = function(all = TRUE, limit = NULL, since = NULL, before = NULL, size = NULL, ...){
                           'List containers:
                           \\describe{
@@ -54,10 +63,8 @@ docker <- setRefClass("docker",
                           \\item{\\code{size}:}{1/True/true or 0/False/false, Show the containers sizes}
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                           }'
-                          dUrl <- dockerUrl
-                          dUrl[c("path", "query")] <- list("containers/json"
-                                                           , list(all = all, limit = limit, since = since, before = before, size = size))
-                          checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
+                          buildREST(dockerUrl, list(path = "containers/json", query = list(all = all, limit = limit, since = since, before = before, size = size))
+                                    , GET)
                           res <- content(response, simplifyDataFrame = TRUE)
                           if(identical(res, list())){return(res)}
                           names(res) <- c("command", "created", "id", "image", "names", "ports", "status")
@@ -75,10 +82,12 @@ docker <- setRefClass("docker",
                           \\item{\\code{filters}:}{a json encoded value of the filters (a map[string][]string) to process on the images list.}
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                            }'
+                          curlOpts <- list(...)
+                          curlOpts$config = c(dockerConf, curlOpts$config)
                           dUrl <- dockerUrl
                           dUrl[c("path", "query")] <- list("images/json"
                                                            , list(all = all, filters = toJSON(filters)))
-                          checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
+                          checkResponse(do.call(GET, c(build_url(dUrl), curlOpts)), pass = c(200L))
                           res <- content(response, simplifyDataFrame = TRUE)
                           if(identical(res, list())){return(res)}
                           names(res) <- c("created", "id", "parentId", "repoTags", "size", "virtualSize")
@@ -102,6 +111,8 @@ docker <- setRefClass("docker",
                                 \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                                }
                           '
+                          curlOpts <- list(...)
+                          curlOpts$config = c(dockerConf, curlOpts$config)
                           dUrl <- dockerUrl
                           dUrl[c("path", "query")] <- list("images/create"
                                                            , list(fromImage = fromImage, fromSrc = fromSrc, repo = repo, tag = tag
@@ -131,9 +142,11 @@ docker <- setRefClass("docker",
                           \\describe{
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                         }'
+                          curlOpts <- list(...)
+                          curlOpts$config = c(dockerConf, curlOpts$config)
                           dUrl <- dockerUrl
                           dUrl["path"] <- list("auth")
-                          checkResponse(POST(build_url(dUrl), ...), pass = c(200L))
+                          checkResponse(do.call(POST, c(build_url(dUrl), curlOpts)), pass = c(200L))
                           content(response, simplifyDataFrame = TRUE)
                           
                         },
@@ -143,9 +156,11 @@ docker <- setRefClass("docker",
                           \\describe{
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                           }'
+                          curlOpts <- list(...)
+                          curlOpts$config = c(dockerConf, curlOpts$config)
                           dUrl <- dockerUrl
                           dUrl["path"] <- list("info")
-                          checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
+                          checkResponse(do.call(GET, c(build_url(dUrl), curlOpts)), pass = c(200L))
                           content(response, simplifyDataFrame = TRUE)
                         },
                         
@@ -154,9 +169,11 @@ docker <- setRefClass("docker",
                           \\describe{
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                           }'
+                          curlOpts <- list(...)
+                          curlOpts$config = c(dockerConf, curlOpts$config)
                           dUrl <- dockerUrl
                           dUrl["path"] <- list("version")
-                          checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
+                          checkResponse(do.call(GET, c(build_url(dUrl), curlOpts)), pass = c(200L))
                           content(response, simplifyDataFrame = TRUE)
                         },
                         
@@ -165,9 +182,11 @@ docker <- setRefClass("docker",
                           \\describe{
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                           }'
+                          curlOpts <- list(...)
+                          curlOpts$config = c(dockerConf, curlOpts$config)
                           dUrl <- dockerUrl
                           dUrl["path"] <- list("_ping")
-                          checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
+                          checkResponse(do.call(GET, c(build_url(dUrl), curlOpts)), pass = c(200L))
                           content(response)
                         }
                       )
