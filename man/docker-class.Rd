@@ -18,6 +18,9 @@ docker is a generator object.
 \section{Methods}{
 
 \describe{
+\item{\code{buildREST(dUrl = dockerUrl, urlComp, httpMethod, renderDF = data.frame(),
+  pass = c(200L), errors = c(), ...)}}{Utility function to build RESTful requests.}
+
 \item{\code{checkAuth(...)}}{Get the default username and email:
   \describe{
   \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
