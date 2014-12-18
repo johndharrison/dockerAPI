@@ -1,3 +1,6 @@
+# dockerAPI 0.1.2
+* Add dockerConf field to docker class to add peresistent curl options.
+
 # dockerAPI 0.1.1
 * Overload $ operator for imageList class and allow tab completion.
 * A basic vignette dockerAPI-basic contains information on getting started.

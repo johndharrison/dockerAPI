@@ -1,4 +1,5 @@
 setOldClass("url")
+setOldClass("config")
 #' docker Class uses the 
 #' 
 #' docker is a generator object. 
@@ -10,6 +11,8 @@ setOldClass("url")
 #' @exportClass docker
 #' @include errorHandler.R
 #' @aliases docker
+#' @field dockerUrl a string of the docker host url or a httr object of class url
+#' @field dockerConf Persistent configuration settings for curl  
 #' @examples
 #' \dontrun{
 #' docker <- docker("http://192.168.59.103:2375") # windows example
@@ -27,9 +30,9 @@ setOldClass("url")
 
 docker <- setRefClass("docker",
                       contains = "errorHandler",
-                      fields = list(dockerUrl = "url"),
+                      fields = list(dockerUrl = "url", dockerConf = "config"),
                       methods = list(
-                        initialize = function(dckUrl = NULL, ...){
+                        initialize = function(dckUrl = NULL, dckrConf = config(), ...){
                           if(is.null(dckUrl)){
                             dockerUrl <<- `class<-`(list(), "url")
                           }else{
@@ -38,6 +41,7 @@ docker <- setRefClass("docker",
                             }
                             dockerUrl <<- dckUrl
                           }
+                          dockerConf <<- dckrConf
                           callSuper(...)
                         },
                         getContainers = function(all = TRUE, limit = NULL, since = NULL, before = NULL, size = NULL, ...){
@@ -112,11 +116,13 @@ docker <- setRefClass("docker",
                           \\item{\\code{term}:}{Term to search.}
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                           }'
+                          curlOpts <- list(...)
+                          curlOpts$config = c(dockerConf, curlOpts$config)
                           if(missing(term)){stop("Please provide a search term", call. = FALSE)}
                           dUrl <- dockerUrl
                           dUrl[c("path", "query")] <- list("images/search"
                                                            , list(term = term))
-                          checkResponse(GET(build_url(dUrl), ...), pass = c(200L))
+                          checkResponse(do.call(GET, c(build_url(dUrl), curlOpts)), pass = c(200L))
                           content(response, simplifyDataFrame = TRUE)
                         },
                         

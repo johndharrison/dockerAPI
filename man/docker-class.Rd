@@ -8,6 +8,13 @@
 \description{
 docker is a generator object.
 }
+\section{Fields}{
+
+\describe{
+\item{\code{dockerUrl}}{a string of the docker host url or a httr object of class url}
+
+\item{\code{dockerConf}}{Persistent configuration settings for curl}
+}}
 \section{Methods}{
 
 \describe{
