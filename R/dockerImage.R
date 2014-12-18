@@ -41,10 +41,8 @@ dockerImage <- setRefClass("dockerImage",
                                 \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                                }
                                '
-                               dUrl <- dockerUrl
-                               dUrl["path"] <- list("images/{{appname}}/json")
-                               appname <- name
-                               checkResponse(GET(whisker.render(build_url(dUrl)), ...), pass = c(200L))
+                               buildREST(dockerUrl, list(path = "images/{{appname}}/json"), GET
+                                         , data.frame(appname = name), ...)
                                content(response, simplifyDataFrame = TRUE)
                              },
                              
@@ -53,10 +51,8 @@ dockerImage <- setRefClass("dockerImage",
                                \\describe{
                                 \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                                }'
-                               dUrl <- dockerUrl
-                               dUrl["path"] <- list("images/{{appname}}/history")
-                               appname <- name
-                               checkResponse(GET(whisker.render(build_url(dUrl)), ...), pass = c(200L))
+                               buildREST(dockerUrl, list(path = "images/{{appname}}/history"), GET
+                                         , data.frame(appname = name), ...)
                                content(response, simplifyDataFrame = TRUE)
                              },
                              
@@ -68,11 +64,8 @@ dockerImage <- setRefClass("dockerImage",
                                 \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                                 }'
                                
-                               dUrl <- dockerUrl
-                               dUrl[c("path", "query")] <- list("images/{{appname}}"
-                                                                , list(force = force, noprune = noprune))
-                               appname <- name
-                               checkResponse(DELETE(whisker.render(build_url(dUrl)), ...), pass = c(200L))
+                               buildREST(dockerUrl, list(path = "images/{{appname}}", query = list(force = force, noprune = noprune))
+                                         , DELETE, data.frame(appname = name), ...)
                                content(response, simplifyDataFrame = TRUE)
                              }
                              
