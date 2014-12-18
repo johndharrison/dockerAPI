@@ -65,7 +65,7 @@ docker <- setRefClass("docker",
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                           }'
                           buildREST(dockerUrl, list(path = "containers/json", query = list(all = all, limit = limit, since = since, before = before, size = size))
-                                    , GET)
+                                    , GET, ...)
                           res <- content(response, simplifyDataFrame = TRUE)
                           if(identical(res, list())){return(res)}
                           names(res) <- c("command", "created", "id", "image", "names", "ports", "status")
@@ -84,7 +84,7 @@ docker <- setRefClass("docker",
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                            }'
                           buildREST(dockerUrl, list(path = "images/json", query = list(all = all, filters = toJSON(filters)))
-                                    , GET)
+                                    , GET, ...)
                           res <- content(response, simplifyDataFrame = TRUE)
                           if(identical(res, list())){return(res)}
                           names(res) <- c("created", "id", "parentId", "repoTags", "size", "virtualSize")
@@ -110,7 +110,7 @@ docker <- setRefClass("docker",
                           '
                           buildREST(dockerUrl, list(path = "images/create", query = list(fromImage = fromImage, fromSrc = fromSrc, repo = repo, tag = tag
                                                                                          , registry = registry, "X-Registry-Auth" = XRegistryAuth))
-                                    , POST)
+                                    , POST, ...)
                           cat(content(response, "text"))
                         },
                         
@@ -131,7 +131,7 @@ docker <- setRefClass("docker",
                           \\describe{
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                         }'
-                          buildREST(dockerUrl, list(path = "auth"), POST)
+                          buildREST(dockerUrl, list(path = "auth"), POST, ...)
                           content(response, simplifyDataFrame = TRUE)                          
                         },
                         
@@ -140,7 +140,7 @@ docker <- setRefClass("docker",
                           \\describe{
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                           }'
-                          buildREST(dockerUrl, list(path = "info"), GET)
+                          buildREST(dockerUrl, list(path = "info"), GET, ...)
                           content(response, simplifyDataFrame = TRUE)                          
                         },
                         
@@ -149,7 +149,7 @@ docker <- setRefClass("docker",
                           \\describe{
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                           }'
-                          buildREST(dockerUrl, list(path = "version"), GET)
+                          buildREST(dockerUrl, list(path = "version"), GET, ...)
                           content(response, simplifyDataFrame = TRUE)                          
                         },
                         
@@ -158,7 +158,7 @@ docker <- setRefClass("docker",
                           \\describe{
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                           }'
-                          buildREST(dockerUrl, list(path = "_ping"), GET)
+                          buildREST(dockerUrl, list(path = "_ping"), GET, ...)
                           content(response)                          
                         }
                       )
