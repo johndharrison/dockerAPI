@@ -4,7 +4,21 @@
 \alias{containerOpt}
 \title{Create container options}
 \usage{
-containerOpt()
+containerOpt(Image, Hostname = "", Domainname = "", User = "",
+  Memory = 0, MemorySwap = 0, CpuShares = 0, Cpuset = "",
+  AttachStdin = FALSE, AttachStdout = TRUE, AttahcStderr = TRUE,
+  PortSpecs = NULL, ExposedPorts = list(), Tty = FALSE,
+  OpenStdin = FALSE, StdinOnce = FALSE, Env = list(), Cmd = NULL,
+  Volumes = list(), WorkingDir = "", Entrypoint = NULL,
+  NetworkDisabled = FALSE, MacAddress = "", OnBuild = NULL,
+  HostConfig = hostconfig())
+}
+\arguments{
+\item{Image}{String value containing the image name to use for the container. Corresponds to docker run IMAGE.}
+
+\item{Hostname}{A string value containing the desired hostname to use for the container. Corresponds to docker run -h.}
+
+\item{Domainname}{A string value containing the desired domainname to use for the container. Corresponds to -h option for docker run cli.}
 }
 \description{
 \code{containerOpt}
