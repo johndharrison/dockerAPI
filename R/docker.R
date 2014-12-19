@@ -126,6 +126,10 @@ docker <- setRefClass("docker",
                           content(response, simplifyDataFrame = TRUE)
                         },
                         
+                        createContainer = function(...){
+                          
+                        },
+                        
                         checkAuth = function(...){
                           'Get the default username and email:
                           \\describe{
