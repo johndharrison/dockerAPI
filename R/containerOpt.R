@@ -15,6 +15,22 @@
 #' @param AttachStdin Boolean value, attaches to stdin. Corresponds to docker run -a stdin
 #' @param AttachStdout Boolean value, attaches to stdin. Corresponds to docker run -a stdout
 #' @param AttachStderr Boolean value, attaches to stdin. Corresponds to docker run -a stderr
+#' @param PortSpecs
+#' @param ExposedPorts An object mapping ports to an empty object in the form of: "ExposedPorts": { "<port>/<tcp|udp>: {}" }. See \url{http://stackoverflow.com/questions/20428302/binding-a-port-to-a-host-interface-using-the-rest-api}
+#' @param Tty Boolean value, Attach standard streams to a tty, including stdin if it is not closed. Corresponds to docker run -t
+#' @param OpenStdin Boolean value, opens stdin. Corresponds to docker run -i.
+#' @param OpenStdinOnce Boolean value, opens stdin. Corresponds to docker run -i.
+#' @param Env A list of environment variables in the form of VAR=value. Corresponds to docker run -e
+#'  \describe{ As an example: \code{Env = list(MYVAR1=foo1, MYVAR2=foo2)} would correspond to \code{docker run -e MYVAR1=foo1 -e MYVAR2=foo2}}
+#' @param Cmd Command to run specified as a string or an array of strings. 
+#' \describe{ As an example \code{Image = "ubuntu", Cmd = list("/bin/echo","hello","world")} would correspond to "\code{docker run ubuntu /bin/echo hello world}}
+#' @param Volumes An object mapping mountpoint paths (strings) inside the container to empty objects.
+#' @param WorkingDir A string value containing the working dir for commands to run in. Corresponds to docker run -w
+#' @param Entrypoint Set the entrypoint for the container as a string or an array of strings. Corresponds to docker run --entrypoint=""
+#' @param NetworkDisabled Boolean value, when true disables neworking for the container. Corresponds to 
+#' @param MacAddress Container MAC address. Corresponds to docker run --mac-address=...
+#' @param OnBuild
+#' @param HostConfig The host configuration. See \code{\link{hostConfig}}
 #' @examples
 #' \dontrun{
 #' containerOpt()
@@ -25,8 +41,16 @@ containerOpt <- function(Image, Hostname = "", Domainname = "", User = "", Memor
                          , AttachStdout = TRUE, AttachStderr = TRUE, PortSpecs = NULL, ExposedPorts = list()
                          , Tty = FALSE, OpenStdin = FALSE, StdinOnce = FALSE, Env = list(), Cmd = NULL
                          , Volumes = list(), WorkingDir = "", Entrypoint = NULL, NetworkDisabled = FALSE
-                         , MacAddress = "", OnBuild = NULL, HostConfig = hostconfig()){
-  
+                         , MacAddress = "", OnBuild = NULL, HostConfig = hostConfig()){
+  if(missing(Image)){stop("An Image name is required", call. = FALSE)}
+  cO <- list(Image = Image, Hostname = Hostname, Domainname = Domainname, User = User, Memory = Memory
+               , MemorySwap = MemorySwap, CpuShares = CpuShares, Cpuset = Cpuset, AttachStdin = AttachStdin
+               , AttachStdout = AttachStdout, AttachStderr = AttachStderr, PortSpecs = PortSpecs 
+               , ExposedPorts = ExposedPorts, Tty = Tty, OpenStdin = OpenStdin, StdinOnce = StdinOnce 
+               , Env = Env, Cmd = Cmd, Volumes = Volumes, WorkingDir = WorkingDir, Entrypoint = Entrypoint
+               , NetworkDisabled = NetworkDisabled, MacAddress = MacAddress, OnBuild = OnBuild
+               , HostConfig = HostConfig)
+  `class<-`(cO, "containerOpts")
 }
 
 #' Create host configuration options
@@ -39,14 +63,21 @@ containerOpt <- function(Image, Hostname = "", Domainname = "", User = "", Memor
 #'  \describe{ As as example: \code{Binds = list("/home/john/fldA:/var/ex/fldA", "/home/john/fldB:/var/ex/fldB")} would correspond to
 #'  \code{docker run -v /home/john/fldA:/var/ex/fldA -v /home/john/fldB:/var/ex/fldB}
 #'  }
-#'  @param ContainerIDFile
+#'  @param ContainerIDFile Write the container id to this file. Corresponds to docker run -cidfile
+#'  \describe{As an example \code{ContainerIDFile = "test.txt"} corresponds to \code{docker run -cidfile="test.txt"}}
 #'  @param LxcConf
 #'  @param Privileged
 #'  @param PortBindings A map of exposed container ports and the host port they should map to. It should be specified in the form { <port>/<protocol>: [{ "HostPort": "<port>" }] } 
-#'  Take note that port is specified as a string and not an integer value. Corresponds to docker run -p.
+#'  Take note that port is specified as a string and not an integer value. Corresponds to docker run -p. If HostIp is non empty you may need a port exposed. See ExposedPorts in containerOpt.
 #'  \describe{ As as example: \code{PortBindings = list(`3838/tcp` = list(list(HostIp = "", HostPort = "3838")))} would correspond to
 #'  \code{docker run -p 3838:3838}
 #'  }
+#'  @param Links
+#'  @param PublishAllPorts
+#'  @param Dns
+#'  @param DnsSearch
+#'  @param ExtraHosts
+#'  @param VolumesFrom A list of volumes to inherit from another container. Specified in the form <container name>[:<ro|rw>]. Corresponds to docker run -volumes-from
 #' @examples
 #' \dontrun{
 #' hostConfig()

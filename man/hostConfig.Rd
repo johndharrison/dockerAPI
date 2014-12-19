@@ -19,17 +19,30 @@ host_path:container_path (to bind-mount a host path into the container), or host
 \code{docker run -v /home/john/fldA:/var/ex/fldA -v /home/john/fldB:/var/ex/fldB}
 }}
 
-\item{ContainerIDFile}{}
+\item{ContainerIDFile}{Write the container id to this file. Corresponds to docker run -cidfile
+\describe{As an example \code{ContainerIDFile = "test.txt"} corresponds to \code{docker run -cidfile="test.txt"}}}
 
 \item{LxcConf}{}
 
 \item{Privileged}{}
 
 \item{PortBindings}{A map of exposed container ports and the host port they should map to. It should be specified in the form { <port>/<protocol>: [{ "HostPort": "<port>" }] }
-Take note that port is specified as a string and not an integer value. Corresponds to docker run -p.
+Take note that port is specified as a string and not an integer value. Corresponds to docker run -p. If HostIp is non empty you may need a port exposed. See ExposedPorts in containerOpt.
 \describe{ As as example: \code{PortBindings = list(`3838/tcp` = list(list(HostIp = "", HostPort = "3838")))} would correspond to
 \code{docker run -p 3838:3838}
 }}
+
+\item{Links}{}
+
+\item{PublishAllPorts}{}
+
+\item{Dns}{}
+
+\item{DnsSearch}{}
+
+\item{ExtraHosts}{}
+
+\item{VolumesFrom}{A list of volumes to inherit from another container. Specified in the form <container name>[:<ro|rw>]. Corresponds to docker run -volumes-from}
 }
 \description{
 \code{hostConfig}

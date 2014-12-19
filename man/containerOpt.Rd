@@ -6,12 +6,12 @@
 \usage{
 containerOpt(Image, Hostname = "", Domainname = "", User = "",
   Memory = 0, MemorySwap = 0, CpuShares = 0, Cpuset = "",
-  AttachStdin = FALSE, AttachStdout = TRUE, AttahcStderr = TRUE,
+  AttachStdin = FALSE, AttachStdout = TRUE, AttachStderr = TRUE,
   PortSpecs = NULL, ExposedPorts = list(), Tty = FALSE,
   OpenStdin = FALSE, StdinOnce = FALSE, Env = list(), Cmd = NULL,
   Volumes = list(), WorkingDir = "", Entrypoint = NULL,
   NetworkDisabled = FALSE, MacAddress = "", OnBuild = NULL,
-  HostConfig = hostconfig())
+  HostConfig = hostConfig())
 }
 \arguments{
 \item{Image}{String value containing the image name to use for the container. Corresponds to docker run IMAGE.}
@@ -36,6 +36,36 @@ containerOpt(Image, Hostname = "", Domainname = "", User = "",
 \item{AttachStdout}{Boolean value, attaches to stdin. Corresponds to docker run -a stdout}
 
 \item{AttachStderr}{Boolean value, attaches to stdin. Corresponds to docker run -a stderr}
+
+\item{PortSpecs}{}
+
+\item{ExposedPorts}{An object mapping ports to an empty object in the form of: "ExposedPorts": { "<port>/<tcp|udp>: {}" }. See \url{http://stackoverflow.com/questions/20428302/binding-a-port-to-a-host-interface-using-the-rest-api}}
+
+\item{Tty}{Boolean value, Attach standard streams to a tty, including stdin if it is not closed. Corresponds to docker run -t}
+
+\item{OpenStdin}{Boolean value, opens stdin. Corresponds to docker run -i.}
+
+\item{Env}{A list of environment variables in the form of VAR=value. Corresponds to docker run -e
+\describe{ As an example: \code{Env = list(MYVAR1=foo1, MYVAR2=foo2)} would correspond to \code{docker run -e MYVAR1=foo1 -e MYVAR2=foo2}}}
+
+\item{Cmd}{Command to run specified as a string or an array of strings.
+\describe{ As an example \code{Image = "ubuntu", Cmd = list("/bin/echo","hello","world")} would correspond to "\code{docker run ubuntu /bin/echo hello world}}}
+
+\item{Volumes}{An object mapping mountpoint paths (strings) inside the container to empty objects.}
+
+\item{WorkingDir}{A string value containing the working dir for commands to run in. Corresponds to docker run -w}
+
+\item{Entrypoint}{Set the entrypoint for the container as a string or an array of strings. Corresponds to docker run --entrypoint=""}
+
+\item{NetworkDisabled}{Boolean value, when true disables neworking for the container. Corresponds to}
+
+\item{MacAddress}{Container MAC address. Corresponds to docker run --mac-address=...}
+
+\item{OnBuild}{}
+
+\item{HostConfig}{The host configuration. See \code{\link{hostConfig}}}
+
+\item{OpenStdinOnce}{Boolean value, opens stdin. Corresponds to docker run -i.}
 }
 \description{
 \code{containerOpt}
