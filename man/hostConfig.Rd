@@ -12,6 +12,13 @@ hostConfig(Binds = NULL, ContainerIDFile = "", LxcConf = list(),
   RestartPolicy = list(Name = "", MaximumRetryCount = 0L),
   SecurityOpt = NULL)
 }
+\arguments{
+\item{Binds}{A list of volume bindings for this container. Each volume binding is a string of the form container_path (to create a new volume for the container),
+host_path:container_path (to bind-mount a host path into the container), or host_path:container_path:ro (to make the bind-mount read-only inside the container). Corresponds to docker run -v.
+\describe{ As as example: \code{Binds = list("/home/john/fldA:/var/ex/fldA", "/home/john/fldB:/var/ex/fldB")} would correspond to
+\code{docker run -v /home/john/fldA:/var/ex/fldA -v /home/john/fldB:/var/ex/fldB}
+}}
+}
 \description{
 \code{hostConfig}
 A utility function to create host configuration options suitable for the HostConfig argument when creating a container.
