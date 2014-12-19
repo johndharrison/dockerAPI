@@ -18,6 +18,18 @@ host_path:container_path (to bind-mount a host path into the container), or host
 \describe{ As as example: \code{Binds = list("/home/john/fldA:/var/ex/fldA", "/home/john/fldB:/var/ex/fldB")} would correspond to
 \code{docker run -v /home/john/fldA:/var/ex/fldA -v /home/john/fldB:/var/ex/fldB}
 }}
+
+\item{ContainerIDFile}{}
+
+\item{LxcConf}{}
+
+\item{Privileged}{}
+
+\item{PortBindings}{A map of exposed container ports and the host port they should map to. It should be specified in the form { <port>/<protocol>: [{ "HostPort": "<port>" }] }
+Take note that port is specified as a string and not an integer value. Corresponds to docker run -p.
+\describe{ As as example: \code{PortBindings = list(`3838/tcp` = list(list(HostIp = "", HostPort = "3838")))} would correspond to
+\code{docker run -p 3838:3838}
+}}
 }
 \description{
 \code{hostConfig}

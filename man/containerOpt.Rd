@@ -16,9 +16,26 @@ containerOpt(Image, Hostname = "", Domainname = "", User = "",
 \arguments{
 \item{Image}{String value containing the image name to use for the container. Corresponds to docker run IMAGE.}
 
-\item{Hostname}{A string value containing the desired hostname to use for the container. Corresponds to docker run -h.}
+\item{Hostname}{A string value containing the desired hostname to use for the container. Corresponds to docker run -h hostname.domain.com.}
 
-\item{Domainname}{A string value containing the desired domainname to use for the container. Corresponds to -h option for docker run cli.}
+\item{Domainname}{A string value containing the desired domainname to use for the container. Corresponds to docker run -h hostname.domain.com.
+\describe{ As as example: \code{Hostname = "hostname", Domainname = "domain.com"} would correspond to \code{docker run -h hostname.domain.com}}}
+
+\item{User}{A string value containg the user to use inside the container. Corresponds to docker run -u}
+
+\item{Memory}{Memory limit in bytes. Corresponds to docker run -m}
+
+\item{MemorySwap}{Total memory usage (memory + swap); set -1 to disable swap.}
+
+\item{CpuShares}{An integer value containing the CPU Shares for container (ie. the relative weight vs othercontainers). Corresponds to docker run -c}
+
+\item{Cpuset}{String value containg the cgroups Cpuset to use. Corresponds to docker run --cpuset=""}
+
+\item{AttachStdin}{Boolean value, attaches to stdin. Corresponds to docker run -a stdin}
+
+\item{AttachStdout}{Boolean value, attaches to stdin. Corresponds to docker run -a stdout}
+
+\item{AttachStderr}{Boolean value, attaches to stdin. Corresponds to docker run -a stderr}
 }
 \description{
 \code{containerOpt}
