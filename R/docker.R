@@ -119,6 +119,7 @@ docker <- setRefClass("docker",
                           \\describe{
                           \\item{\\code{term}:}{Term to search.}
                           \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                          
                           }'
                           if(missing(term)){stop("Please provide a search term", call. = FALSE)}
                           buildREST(dockerUrl, list(path = "images/search", query = list(term = term))
@@ -126,8 +127,23 @@ docker <- setRefClass("docker",
                           content(response, simplifyDataFrame = TRUE)
                         },
                         
-                        createContainer = function(...){
-                          
+                        createContainer = function(contOpt, ...){
+                          'Create a container
+                          \\describe{
+                          \\item{\\code{contOpt}:}{A object of class "containerOpt". See \\code{\\link{containerOpt}}}
+                          \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
+                          }'
+                          if(!"containerOpts" %in% class(contOpt)){
+                            stop("contOpt must be of class \"containerOpts\"")
+                          }
+                          jsonContent <- toJSON(prepareJSON(contOpt), force = TRUE, null = "null", auto_unbox = TRUE)
+                          curlOpts <- list(...)
+                          curlOpts$config = c(add_headers("Content-Type" = "application/json"), curlOpts$config)
+                          curlOpts$body = c(jsonContent, curlOpts$body)
+                          do.call(.self$buildREST, c(list(urlComp = list(path = "containers/create"), dUrl = dockerUrl
+                                                     , httpMethod = POST, renderDF = data.frame(), pass = c(201L)
+                                                     , errors = c()), curlOpts))
+                          content(response)
                         },
                         
                         checkAuth = function(...){
