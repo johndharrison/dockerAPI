@@ -26,6 +26,12 @@ docker is a generator object.
   \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
 }}
 
+\item{\code{createContainer(contOpt, ...)}}{Create a container
+\describe{
+\item{\code{contOpt}:}{A object of class "containerOpt". See \code{\link{containerOpt}}}
+\item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+}}
+
 \item{\code{createImage(fromImage, fromSrc = NULL, repo = NULL, tag = NULL,
   registry = NULL, XRegistryAuth = NULL, ...)}}{Create an image, either by pulling it from the registry or by importing it.
      \describe{
@@ -70,6 +76,7 @@ docker is a generator object.
 \describe{
 \item{\code{term}:}{Term to search.}
 \item{\code{...}:}{Additional arguments to pass to httr functions \code{\link{GET}}, \code{\link{POST}} etc.}
+
 }}
 
 \item{\code{version(...)}}{Show the docker version information:
