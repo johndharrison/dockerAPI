@@ -38,7 +38,7 @@
 
 containerOpt <- function(Image, Hostname = "", Domainname = "", User = "", Memory = 0
                          , MemorySwap = 0, CpuShares = 0, Cpuset = "", AttachStdin = FALSE
-                         , AttachStdout = TRUE, AttachStderr = TRUE, PortSpecs = NULL, ExposedPorts = list()
+                         , AttachStdout = TRUE, AttachStderr = TRUE, PortSpecs = NULL, ExposedPorts = HostConfig[["PortBindings"]][["container"]]
                          , Tty = FALSE, OpenStdin = FALSE, StdinOnce = FALSE, Env = list(), Cmd = NULL
                          , Volumes = list(), WorkingDir = "", Entrypoint = NULL, NetworkDisabled = FALSE
                          , MacAddress = "", OnBuild = NULL, HostConfig = hostConfig()){
@@ -58,41 +58,86 @@ containerOpt <- function(Image, Hostname = "", Domainname = "", User = "", Memor
 #' \code{hostConfig}
 #' A utility function to create host configuration options suitable for the HostConfig argument when creating a container.
 #' @export
-#' @param Binds A list of volume bindings for this container. Each volume binding is a string of the form container_path (to create a new volume for the container),
+#' @param Binds A character vector of volume bindings for this container. Each volume binding is a string of the form container_path (to create a new volume for the container),
 #'  host_path:container_path (to bind-mount a host path into the container), or host_path:container_path:ro (to make the bind-mount read-only inside the container). Corresponds to docker run -v.
-#'  \describe{ As as example: \code{Binds = list("/home/john/fldA:/var/ex/fldA", "/home/john/fldB:/var/ex/fldB")} would correspond to
+#'  \describe{ As as example: \code{Binds = c("/home/john/fldA:/var/ex/fldA", "/home/john/fldB:/var/ex/fldB")} would correspond to
 #'  \code{docker run -v /home/john/fldA:/var/ex/fldA -v /home/john/fldB:/var/ex/fldB}
 #'  }
 #'  @param ContainerIDFile Write the container id to this file. Corresponds to docker run -cidfile
 #'  \describe{As an example \code{ContainerIDFile = "test.txt"} corresponds to \code{docker run -cidfile="test.txt"}}
-#'  @param LxcConf
-#'  @param Privileged
+#'  @param LxcConf A data.frame of key and value columns containing LXC specific configurations. Example data.frame(Key = c("lxc.network.type", "lxc.network.ipv4"
+#' ), Value = c("veth", "192.168.1.3/24")). Corresponds to docker run --lxc-conf
+#'  @param Privileged Gives the container full access to the host. Specified as a boolean value. Corresponds to docker run --privileged
 #'  @param PortBindings A map of exposed container ports and the host port they should map to. It should be specified in the form { <port>/<protocol>: [{ "HostPort": "<port>" }] } 
 #'  Take note that port is specified as a string and not an integer value. Corresponds to docker run -p. If HostIp is non empty you may need a port exposed. See ExposedPorts in containerOpt.
 #'  \describe{ As as example: \code{PortBindings = list(`3838/tcp` = list(list(HostIp = "", HostPort = "3838")))} would correspond to
 #'  \code{docker run -p 3838:3838}
 #'  }
-#'  @param Links
-#'  @param PublishAllPorts
-#'  @param Dns
-#'  @param DnsSearch
+#'  @param Links A character vector of links for the container. Each link entry should be of of the form "container_name:alias".
+#'  @param PublishAllPorts Allocates a random host port for all of a container's exposed ports. Specified as a boolean value.
+#'  @param Dns A character vector of dns servers for the container to use. Example c("8.8.8.8", "8.8.4.4")
+#'  @param DnsSearch A character vector of DNS search domains
 #'  @param ExtraHosts
-#'  @param VolumesFrom A list of volumes to inherit from another container. Specified in the form <container name>[:<ro|rw>]. Corresponds to docker run -volumes-from
+#'  @param VolumesFrom A list of volumes to inherit from another container. Specified in the form <container name>[:<ro|rw>]. Corresponds to docker run -volumes-from. 
+#'  @param Devices
+#'  @param NetworkMode
+#'  @param IpcMode
+#'  @param CapAdd
+#'  @param CapDrop
+#'  @param RestartPolicy
+#'  @param SecurityOpt
 #' @examples
 #' \dontrun{
 #' hostConfig()
 #' }
 
-hostConfig <- function(Binds = NULL, ContainerIDFile = "", LxcConf = list(), Privileged = FALSE
-                       , PortBindings = list(), Links = NULL, PublishAllPorts = FALSE
+hostConfig <- function(Binds = NULL, ContainerIDFile = "", LxcConf = data.frame(Key = character(0), Value = character(0)), Privileged = FALSE
+                       , PortBindings = portBindings(), Links = NULL, PublishAllPorts = FALSE
                        , Dns = NULL, DnsSearch = NULL, ExtraHosts = NULL, VolumesFrom = NULL
-                       , Devices = list(), NetworkMode = "Bridge", IpcMode = "", CapAdd = NULL
+                       , Devices = list(), NetworkMode = "bridge", IpcMode = "", CapAdd = NULL
                        , CapDrop = NULL, RestartPolicy = list(Name = "", MaximumRetryCount = 0L)
                        , SecurityOpt = NULL){
   hc <- list(Binds = Binds, ContainerIDFile = ContainerIDFile, LxcConf = LxcConf, Privileged = Privileged
-             , PortBindings = PortBindings, Links = Links, PublishAllPorts = PublishAllPorts
+             , PortBindings = portBindings(), Links = Links, PublishAllPorts = PublishAllPorts
              , Dns = Dns, DnsSearch = DnsSearch, ExtraHosts = ExtraHosts, VolumesFrom = VolumesFrom
              , Devices = Devices, NetworkMode = NetworkMode, IpcMode = IpcMode, CapAdd = CapAdd
              , CapDrop = CapDrop, RestartPolicy = RestartPolicy, SecurityOpt = SecurityOpt)
   `class<-`(hc, "hostConfig")
 }
+
+#' Create Port Bindings options
+#'
+#' \code{portBindings}
+#' A utility function to create Port Bindings options suitable for the PortBindings argument in \code{\link{hostConfig()}}.
+#' @export
+#' @param ipHostPort host A character vector of host interface and host port listings
+#' @param containerPort A character vector of container ports. Format (80, 80/tcp 80/udp etc)
+#' @examples
+#' \dontrun{
+#' portBindings()
+#' }
+
+portBindings <- function(ipHostPort = NULL, containerPort = NULL){
+  if(length(ipHostPort) != length(containerPort)){
+    stop("Number of Host ports and ips should be the same as container ports.")
+  }
+  if(length(ipHostPort) == 0){
+    return(
+      structure(list(host = data.frame(interface = character(0), port = character(0), stringsAsFactors = FALSE)
+                     , container = data.frame(port = character(0), protocol = character(0), stringsAsFactors = FALSE))
+                , class = "portBinding")
+    )
+  }
+  cP <- strsplit(containerPort, "/")
+  containerPorts <- lapply(cP, head, 1)
+  protocol <- lapply(cP, tail, -1)
+  protocol[sapply(protocol, length) == 0] <- "tcp"
+  ipHP <- strsplit(ipHostPort, ":")
+  hostPorts <- lapply(ipHP, tail, 1)
+  hostInterface <- lapply(ipHP, head, -1)
+  hostInterface[sapply(hostInterface, length) == 0] <- ""
+  structure(list(host = data.frame(interface = unlist(hostInterface), port = unlist(hostPorts))
+       , container = data.frame(port = unlist(containerPorts), protocol = unlist(protocol)))
+       , class = "portBinding")
+}
+
