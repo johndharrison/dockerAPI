@@ -98,7 +98,7 @@ hostConfig <- function(Binds = NULL, ContainerIDFile = "", LxcConf = data.frame(
                        , CapDrop = NULL, RestartPolicy = list(Name = "", MaximumRetryCount = 0L)
                        , SecurityOpt = NULL){
   hc <- list(Binds = Binds, ContainerIDFile = ContainerIDFile, LxcConf = LxcConf, Privileged = Privileged
-             , PortBindings = portBindings(), Links = Links, PublishAllPorts = PublishAllPorts
+             , PortBindings = PortBindings, Links = Links, PublishAllPorts = PublishAllPorts
              , Dns = Dns, DnsSearch = DnsSearch, ExtraHosts = ExtraHosts, VolumesFrom = VolumesFrom
              , Devices = Devices, NetworkMode = NetworkMode, IpcMode = IpcMode, CapAdd = CapAdd
              , CapDrop = CapDrop, RestartPolicy = RestartPolicy, SecurityOpt = SecurityOpt)
@@ -136,8 +136,45 @@ portBindings <- function(ipHostPort = NULL, containerPort = NULL){
   hostPorts <- lapply(ipHP, tail, 1)
   hostInterface <- lapply(ipHP, head, -1)
   hostInterface[sapply(hostInterface, length) == 0] <- ""
-  structure(list(host = data.frame(interface = unlist(hostInterface), port = unlist(hostPorts))
-       , container = data.frame(port = unlist(containerPorts), protocol = unlist(protocol)))
+  structure(list(host = data.frame(interface = unlist(hostInterface), port = unlist(hostPorts), stringsAsFactors = FALSE)
+       , container = data.frame(port = unlist(containerPorts), protocol = unlist(protocol), stringsAsFactors = FALSE))
        , class = "portBinding")
 }
 
+#' @export
+prepareJSON <- function(x, ...){UseMethod("prepareJSON")}
+
+setGeneric("prepareJSON")
+
+#' @export
+prepareJSON.containerOpts <- function(x, ...){
+  x$ExposedPorts <- if(nrow(x$ExposedPorts) == 0L){
+    c()
+  }else{
+    toJSON(setNames(list()[seq(nrow(x$ExposedPorts))]
+             , paste0(x$ExposedPorts$port, "/", x$ExposedPorts$protocol)))
+  }
+  
+  x$HostConfig <- prepareJSON(x$HostConfig)
+  x
+}
+
+#' @export
+prepareJSON.hostConfig <- function(x, ...){
+  x$PortBindings <- prepareJSON(x$PortBindings)
+  x
+}
+
+#' @export
+prepareJSON.portBinding <- function(x, ...){
+  if(nrow(x$host) == 0L){
+    c()
+  }else{
+    portMap <- paste(x$container$port, x$container$protocol, sep = "/")
+    lapply(seq_along(portMap), function(y){
+      setNames(list(data.frame("HostIp" = x$host[y, "interface"]
+                                   , "HostPort" = x$host[y, "port"], stringsAsFactors = FALSE))
+               , portMap[y])
+    })
+  }
+}
