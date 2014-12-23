@@ -136,7 +136,7 @@ docker <- setRefClass("docker",
                           if(!"containerOpts" %in% class(contOpt)){
                             stop("contOpt must be of class \"containerOpts\"")
                           }
-                          jsonContent <- toJSON(prepareJSON(contOpt), force = TRUE, null = "null", auto_unbox = TRUE)
+                          jsonContent <- toJSON(prepareJSON(contOpt), force = TRUE, auto_unbox = TRUE)
                           curlOpts <- list(...)
                           curlOpts$config = c(add_headers("Content-Type" = "application/json"), curlOpts$config)
                           curlOpts$body = c(jsonContent, curlOpts$body)
