@@ -4,13 +4,13 @@
 \alias{hostConfig}
 \title{Create host configuration options}
 \usage{
-hostConfig(Binds = NULL, ContainerIDFile = "", LxcConf = data.frame(Key =
+hostConfig(Binds = NA, ContainerIDFile = "", LxcConf = data.frame(Key =
   character(0), Value = character(0)), Privileged = FALSE,
-  PortBindings = portBindings(), Links = NULL, PublishAllPorts = FALSE,
-  Dns = NULL, DnsSearch = NULL, ExtraHosts = NULL, VolumesFrom = NULL,
-  Devices = list(), NetworkMode = "bridge", IpcMode = "", CapAdd = NULL,
-  CapDrop = NULL, RestartPolicy = list(Name = "", MaximumRetryCount = 0L),
-  SecurityOpt = NULL)
+  PortBindings = portBindings(), Links = NA, PublishAllPorts = FALSE,
+  Dns = NA, DnsSearch = NA, ExtraHosts = NA, VolumesFrom = NA,
+  Devices = list(), NetworkMode = "bridge", IpcMode = "", CapAdd = NA,
+  CapDrop = NA, RestartPolicy = list(Name = "", MaximumRetryCount = 0L),
+  SecurityOpt = NA)
 }
 \arguments{
 \item{Binds}{A character vector of volume bindings for this container. Each volume binding is a string of the form container_path (to create a new volume for the container),

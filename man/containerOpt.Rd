@@ -7,11 +7,11 @@
 containerOpt(Image, Hostname = "", Domainname = "", User = "",
   Memory = 0, MemorySwap = 0, CpuShares = 0, Cpuset = "",
   AttachStdin = FALSE, AttachStdout = TRUE, AttachStderr = TRUE,
-  PortSpecs = NULL,
+  PortSpecs = NA,
   ExposedPorts = HostConfig[["PortBindings"]][["container"]], Tty = FALSE,
-  OpenStdin = FALSE, StdinOnce = FALSE, Env = list(), Cmd = NULL,
-  Volumes = list(), WorkingDir = "", Entrypoint = NULL,
-  NetworkDisabled = FALSE, MacAddress = "", OnBuild = NULL,
+  OpenStdin = FALSE, StdinOnce = FALSE, Env = list(), Cmd = NA,
+  Volumes = NULL, WorkingDir = "", Entrypoint = NA,
+  NetworkDisabled = FALSE, MacAddress = "", OnBuild = NA,
   HostConfig = hostConfig())
 }
 \arguments{
