@@ -38,10 +38,10 @@
 
 containerOpt <- function(Image, Hostname = "", Domainname = "", User = "", Memory = 0
                          , MemorySwap = 0, CpuShares = 0, Cpuset = "", AttachStdin = FALSE
-                         , AttachStdout = TRUE, AttachStderr = TRUE, PortSpecs = NULL, ExposedPorts = HostConfig[["PortBindings"]][["container"]]
-                         , Tty = FALSE, OpenStdin = FALSE, StdinOnce = FALSE, Env = list(), Cmd = NULL
-                         , Volumes = list(), WorkingDir = "", Entrypoint = NULL, NetworkDisabled = FALSE
-                         , MacAddress = "", OnBuild = NULL, HostConfig = hostConfig()){
+                         , AttachStdout = TRUE, AttachStderr = TRUE, PortSpecs = NA, ExposedPorts = HostConfig[["PortBindings"]][["container"]]
+                         , Tty = FALSE, OpenStdin = FALSE, StdinOnce = FALSE, Env = list(), Cmd = NA
+                         , Volumes = NULL, WorkingDir = "", Entrypoint = NA, NetworkDisabled = FALSE
+                         , MacAddress = "", OnBuild = NA, HostConfig = hostConfig()){
   if(missing(Image)){stop("An Image name is required", call. = FALSE)}
   cO <- list(Image = Image, Hostname = Hostname, Domainname = Domainname, User = User, Memory = Memory
                , MemorySwap = MemorySwap, CpuShares = CpuShares, Cpuset = Cpuset, AttachStdin = AttachStdin
@@ -91,12 +91,12 @@ containerOpt <- function(Image, Hostname = "", Domainname = "", User = "", Memor
 #' hostConfig()
 #' }
 
-hostConfig <- function(Binds = NULL, ContainerIDFile = "", LxcConf = data.frame(Key = character(0), Value = character(0)), Privileged = FALSE
-                       , PortBindings = portBindings(), Links = NULL, PublishAllPorts = FALSE
-                       , Dns = NULL, DnsSearch = NULL, ExtraHosts = NULL, VolumesFrom = NULL
-                       , Devices = list(), NetworkMode = "bridge", IpcMode = "", CapAdd = NULL
-                       , CapDrop = NULL, RestartPolicy = list(Name = "", MaximumRetryCount = 0L)
-                       , SecurityOpt = NULL){
+hostConfig <- function(Binds = NA, ContainerIDFile = "", LxcConf = data.frame(Key = character(0), Value = character(0)), Privileged = FALSE
+                       , PortBindings = portBindings(), Links = NA, PublishAllPorts = FALSE
+                       , Dns = NA, DnsSearch = NA, ExtraHosts = NA, VolumesFrom = NA
+                       , Devices = list(), NetworkMode = "bridge", IpcMode = "", CapAdd = NA
+                       , CapDrop = NA, RestartPolicy = list(Name = "", MaximumRetryCount = 0L)
+                       , SecurityOpt = NA){
   hc <- list(Binds = Binds, ContainerIDFile = ContainerIDFile, LxcConf = LxcConf, Privileged = Privileged
              , PortBindings = PortBindings, Links = Links, PublishAllPorts = PublishAllPorts
              , Dns = Dns, DnsSearch = DnsSearch, ExtraHosts = ExtraHosts, VolumesFrom = VolumesFrom
@@ -151,8 +151,8 @@ prepareJSON.containerOpts <- function(x, ...){
   x$ExposedPorts <- if(nrow(x$ExposedPorts) == 0L){
     c()
   }else{
-    toJSON(setNames(list()[seq(nrow(x$ExposedPorts))]
-             , paste0(x$ExposedPorts$port, "/", x$ExposedPorts$protocol)))
+    setNames(list()[seq(nrow(x$ExposedPorts))]
+             , paste0(x$ExposedPorts$port, "/", x$ExposedPorts$protocol))
   }
   
   x$HostConfig <- prepareJSON(x$HostConfig)
@@ -171,7 +171,7 @@ prepareJSON.portBinding <- function(x, ...){
     c()
   }else{
     portMap <- paste(x$container$port, x$container$protocol, sep = "/")
-    lapply(seq_along(portMap), function(y){
+    sapply(seq_along(portMap), function(y){
       setNames(list(data.frame("HostIp" = x$host[y, "interface"]
                                    , "HostPort" = x$host[y, "port"], stringsAsFactors = FALSE))
                , portMap[y])
