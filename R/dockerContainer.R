@@ -213,12 +213,15 @@ dockerContainer <- setRefClass("dockerContainer",
                                    \\item{\\code{Devices}:}{A list of devices to add to the container specified in the form { "PathOnHost": "/dev/deviceName", "PathInContainer": "/dev/deviceName", "CgroupPermissions": "mrw"}}
                                    \\item{\\code{...}:}{Additional arguments to pass to httr functions \\code{\\link{GET}}, \\code{\\link{POST}} etc.}
                                    }'
-                                   buildREST(dockerUrl, list(path = "containers/{{appid}}", list())
-                                             , POST, data.frame(appid = id), pass = c(204L), ...)
-                                   dUrl <- dockerUrl
-                                   dUrl[c("path", "query")] <- list("containers/{{id}}/start"
-                                                                    , list())
-                                   content(GET(whisker.render(build_url(dUrl)), ...))
+                                   buildREST(dockerUrl, list(path = "containers/{{appid}}/start"), POST
+                                             , renderDF = data.frame(appid = id), pass = c(204L), ...)
+#                                    jsonContent <- toJSON(prepareJSON(contOpt), force = TRUE, null = "null", auto_unbox = TRUE)
+#                                    curlOpts <- list(...)
+#                                    curlOpts$config = c(add_headers("Content-Type" = "application/json"), curlOpts$config)
+#                                    curlOpts$body = c(jsonContent, curlOpts$body)
+#                                    do.call(.self$buildREST, c(list(urlComp = list(path = "containers/create"), dUrl = dockerUrl
+#                                                                    , httpMethod = POST, renderDF = data.frame(), pass = c(201L)
+#                                                                    , errors = c()), curlOpts))
                                  }
                                )
 )
