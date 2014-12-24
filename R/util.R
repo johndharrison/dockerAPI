@@ -25,3 +25,7 @@
   dockerImageMethods <- getRefClass(class(x))$methods()
   grep(pattern, dockerImageMethods[!dockerImageMethods%in%c(superMethods, dockerMethods, errorMethods)], value=TRUE)
 }
+
+dummyFunc <- function(){
+  RCurl::getURL
+}
