@@ -11,9 +11,6 @@ setOldClass("response")
 #' @export errorHandler
 #' @exportClass errorHandler
 #' @aliases errorHandler
-#' @examples
-#' \dontrun{
-#' }
 
 errorHandler <- setRefClass("errorHandler",
                             fields = list(
