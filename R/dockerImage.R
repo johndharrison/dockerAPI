@@ -11,6 +11,11 @@
 #' @aliases dockerImage
 #' @examples
 #' \dontrun{
+#' myConfig <- httr::config(sslcert = "../../certs/cert.pem"
+#' , sslkey = "../../certs/key.pem"
+#' , sslversion=1L, ssl.verifypeer = FALSE)
+#' dckr <- docker("https://192.168.59.103:2376", myConfig)
+#' dckr$getContainers()
 #' }
 
 dockerImage <- setRefClass("dockerImage",

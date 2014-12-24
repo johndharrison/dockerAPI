@@ -11,6 +11,11 @@
 #' @include docker.R
 #' @examples
 #' \dontrun{
+#' myConfig <- httr::config(sslcert = "../../certs/cert.pem"
+#' , sslkey = "../../certs/key.pem"
+#' , sslversion=1L, ssl.verifypeer = FALSE)
+#' dckr <- docker("https://192.168.59.103:2376", myConfig)
+#' dckr$getContainers()
 #' }
 
 dockerContainer <- setRefClass("dockerContainer",
@@ -185,8 +190,6 @@ dockerContainer <- setRefClass("dockerContainer",
                                    }'
                                    buildREST(dockerUrl, list(path = "containers/{{appid}}", list(force = force, v = v))
                                              , DELETE, data.frame(appid = id), pass = c(204L), ...)
-                                   
-                                   content(response, simplifyDataFrame = TRUE)
                                  },
                                  
                                  start = function(Binds = NULL, Links = NULL, LxcConf = NULL, PortBindings = NULL
