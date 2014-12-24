@@ -20,7 +20,9 @@ containerOpt(Image, Hostname = "", Domainname = "", User = "",
 \item{Hostname}{A string value containing the desired hostname to use for the container. Corresponds to docker run -h hostname.domain.com.}
 
 \item{Domainname}{A string value containing the desired domainname to use for the container. Corresponds to docker run -h hostname.domain.com.
-\describe{ As as example: \code{Hostname = "hostname", Domainname = "domain.com"} would correspond to \code{docker run -h hostname.domain.com}}}
+\describe{
+\item{Example:}{As as example: \code{Hostname = "hostname", Domainname = "domain.com"} would correspond to \code{docker run -h hostname.domain.com}}
+}}
 
 \item{User}{A string value containg the user to use inside the container. Corresponds to docker run -u}
 
@@ -49,10 +51,14 @@ containerOpt(Image, Hostname = "", Domainname = "", User = "",
 \item{StdinOnce}{Boolean value, opens stdin. Corresponds to docker run -i.}
 
 \item{Env}{A list of environment variables in the form of VAR=value. Corresponds to docker run -e
-\describe{ As an example: \code{Env = list(MYVAR1=foo1, MYVAR2=foo2)} would correspond to \code{docker run -e MYVAR1=foo1 -e MYVAR2=foo2}}}
+\describe{
+\item{Example:}{As an example: \code{Env = list(MYVAR1=foo1, MYVAR2=foo2)} would correspond to \code{docker run -e MYVAR1=foo1 -e MYVAR2=foo2}}
+}}
 
 \item{Cmd}{Command to run specified as a string or an array of strings.
-\describe{ As an example \code{Image = "ubuntu", Cmd = list("/bin/echo","hello","world")} would correspond to "\code{docker run ubuntu /bin/echo hello world}}}
+\describe{
+ \item{Example:}{As an example \code{Image = "ubuntu", Cmd = list("/bin/echo","hello","world")} would correspond to "\code{docker run ubuntu /bin/echo hello world}}
+ }}
 
 \item{Volumes}{An object mapping mountpoint paths (strings) inside the container to empty objects.}
 

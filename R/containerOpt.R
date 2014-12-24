@@ -6,7 +6,9 @@
 #' @param Image String value containing the image name to use for the container. Corresponds to docker run IMAGE.
 #' @param Hostname A string value containing the desired hostname to use for the container. Corresponds to docker run -h hostname.domain.com.
 #' @param Domainname A string value containing the desired domainname to use for the container. Corresponds to docker run -h hostname.domain.com.
-#'  \describe{ As as example: \code{Hostname = "hostname", Domainname = "domain.com"} would correspond to \code{docker run -h hostname.domain.com}}
+#'  \describe{ 
+#'  \item{Example:}{As as example: \code{Hostname = "hostname", Domainname = "domain.com"} would correspond to \code{docker run -h hostname.domain.com}}
+#'  }
 #' @param User A string value containg the user to use inside the container. Corresponds to docker run -u 
 #' @param Memory Memory limit in bytes. Corresponds to docker run -m
 #' @param MemorySwap Total memory usage (memory + swap); set -1 to disable swap.
@@ -21,9 +23,13 @@
 #' @param OpenStdin Boolean value, opens stdin. Corresponds to docker run -i.
 #' @param StdinOnce Boolean value, opens stdin. Corresponds to docker run -i.
 #' @param Env A list of environment variables in the form of VAR=value. Corresponds to docker run -e
-#'  \describe{ As an example: \code{Env = list(MYVAR1=foo1, MYVAR2=foo2)} would correspond to \code{docker run -e MYVAR1=foo1 -e MYVAR2=foo2}}
+#'  \describe{ 
+#'  \item{Example:}{As an example: \code{Env = list(MYVAR1=foo1, MYVAR2=foo2)} would correspond to \code{docker run -e MYVAR1=foo1 -e MYVAR2=foo2}}
+#'  }
 #' @param Cmd Command to run specified as a string or an array of strings. 
-#' \describe{ As an example \code{Image = "ubuntu", Cmd = list("/bin/echo","hello","world")} would correspond to "\code{docker run ubuntu /bin/echo hello world}}
+#' \describe{ 
+#'  \item{Example:}{As an example \code{Image = "ubuntu", Cmd = list("/bin/echo","hello","world")} would correspond to "\code{docker run ubuntu /bin/echo hello world}}
+#'  }
 #' @param Volumes An object mapping mountpoint paths (strings) inside the container to empty objects.
 #' @param WorkingDir A string value containing the working dir for commands to run in. Corresponds to docker run -w
 #' @param Entrypoint Set the entrypoint for the container as a string or an array of strings. Corresponds to docker run --entrypoint=""
@@ -38,7 +44,8 @@
 
 containerOpt <- function(Image, Hostname = "", Domainname = "", User = "", Memory = 0
                          , MemorySwap = 0, CpuShares = 0, Cpuset = "", AttachStdin = FALSE
-                         , AttachStdout = TRUE, AttachStderr = TRUE, PortSpecs = NA, ExposedPorts = HostConfig[["PortBindings"]][["container"]]
+                         , AttachStdout = TRUE, AttachStderr = TRUE, PortSpecs = NA
+                         , ExposedPorts = HostConfig[["PortBindings"]][["container"]]
                          , Tty = FALSE, OpenStdin = FALSE, StdinOnce = FALSE, Env = list(), Cmd = NA
                          , Volumes = NULL, WorkingDir = "", Entrypoint = NA, NetworkDisabled = FALSE
                          , MacAddress = "", OnBuild = NA, HostConfig = hostConfig()){
@@ -60,18 +67,23 @@ containerOpt <- function(Image, Hostname = "", Domainname = "", User = "", Memor
 #' @export
 #' @param Binds A character vector of volume bindings for this container. Each volume binding is a string of the form container_path (to create a new volume for the container),
 #'  host_path:container_path (to bind-mount a host path into the container), or host_path:container_path:ro (to make the bind-mount read-only inside the container). Corresponds to docker run -v.
-#'  \describe{ As as example: \code{Binds = c("/home/john/fldA:/var/ex/fldA", "/home/john/fldB:/var/ex/fldB")} would correspond to
+#'  \describe{ 
+#'  \item{Example:}{As as example: \code{Binds = c("/home/john/fldA:/var/ex/fldA", "/home/john/fldB:/var/ex/fldB")} would correspond to
 #'  \code{docker run -v /home/john/fldA:/var/ex/fldA -v /home/john/fldB:/var/ex/fldB}
-#'  }
+#'  }}
 #'  @param ContainerIDFile Write the container id to this file. Corresponds to docker run -cidfile
-#'  \describe{As an example \code{ContainerIDFile = "test.txt"} corresponds to \code{docker run -cidfile="test.txt"}}
+#'  \describe{
+#'  \item{Example:}{As an example \code{ContainerIDFile = "test.txt"} corresponds to \code{docker run -cidfile="test.txt"}}
+#'  }
 #'  @param LxcConf A data.frame of key and value columns containing LXC specific configurations. Example data.frame(Key = c("lxc.network.type", "lxc.network.ipv4"
 #' ), Value = c("veth", "192.168.1.3/24")). Corresponds to docker run --lxc-conf
 #'  @param Privileged Gives the container full access to the host. Specified as a boolean value. Corresponds to docker run --privileged
 #'  @param PortBindings A map of exposed container ports and the host port they should map to. It should be specified in the form { <port>/<protocol>: [{ "HostPort": "<port>" }] } 
 #'  Take note that port is specified as a string and not an integer value. Corresponds to docker run -p. If HostIp is non empty you may need a port exposed. See ExposedPorts in containerOpt.
-#'  \describe{ As as example: \code{PortBindings = list(`3838/tcp` = list(list(HostIp = "", HostPort = "3838")))} would correspond to
+#'  \describe{ 
+#'  \item{Example:}{As as example: \code{PortBindings = list(`3838/tcp` = list(list(HostIp = "", HostPort = "3838")))} would correspond to
 #'  \code{docker run -p 3838:3838}
+#'  }
 #'  }
 #'  @param Links A character vector of links for the container. Each link entry should be of of the form "container_name:alias".
 #'  @param PublishAllPorts Allocates a random host port for all of a container's exposed ports. Specified as a boolean value.

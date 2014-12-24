@@ -45,7 +45,9 @@ docker <- setRefClass("docker",
                           callSuper(...)
                         },
                         
-                        buildREST = function(dUrl = dockerUrl, urlComp, httpMethod, renderDF = data.frame(), pass = c(200L), errors = c(), ...){
+                        buildREST = function(dUrl = dockerUrl, urlComp, httpMethod
+                                             , renderDF = data.frame(), pass = c(200L)
+                                             , errors = c(), ...){
                           'Utility function to build RESTful requests.'
                           curlOpts <- list(...)
                           curlOpts$config = c(dockerConf, curlOpts$config)
@@ -54,7 +56,8 @@ docker <- setRefClass("docker",
                           checkResponse(do.call(httpMethod, c(appUrl, curlOpts)), pass = pass, errors = errors)
                         },
                         
-                        getContainers = function(all = TRUE, limit = NULL, since = NULL, before = NULL, size = NULL, ...){
+                        getContainers = function(all = TRUE, limit = NULL, since = NULL
+                                                 , before = NULL, size = NULL, ...){
                           'List containers:
                           \\describe{
                           \\item{\\code{all}:}{1/True/true or 0/False/false, Show all containers. Only running containers are shown by default (i.e., this defaults to false)}

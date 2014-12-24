@@ -15,12 +15,15 @@ hostConfig(Binds = NA, ContainerIDFile = "", LxcConf = data.frame(Key =
 \arguments{
 \item{Binds}{A character vector of volume bindings for this container. Each volume binding is a string of the form container_path (to create a new volume for the container),
 host_path:container_path (to bind-mount a host path into the container), or host_path:container_path:ro (to make the bind-mount read-only inside the container). Corresponds to docker run -v.
-\describe{ As as example: \code{Binds = c("/home/john/fldA:/var/ex/fldA", "/home/john/fldB:/var/ex/fldB")} would correspond to
+\describe{
+\item{Example:}{As as example: \code{Binds = c("/home/john/fldA:/var/ex/fldA", "/home/john/fldB:/var/ex/fldB")} would correspond to
 \code{docker run -v /home/john/fldA:/var/ex/fldA -v /home/john/fldB:/var/ex/fldB}
-}}
+}}}
 
 \item{ContainerIDFile}{Write the container id to this file. Corresponds to docker run -cidfile
-\describe{As an example \code{ContainerIDFile = "test.txt"} corresponds to \code{docker run -cidfile="test.txt"}}}
+\describe{
+\item{Example:}{As an example \code{ContainerIDFile = "test.txt"} corresponds to \code{docker run -cidfile="test.txt"}}
+}}
 
 \item{LxcConf}{A data.frame of key and value columns containing LXC specific configurations. Example data.frame(Key = c("lxc.network.type", "lxc.network.ipv4"
 ), Value = c("veth", "192.168.1.3/24")). Corresponds to docker run --lxc-conf}
@@ -29,8 +32,10 @@ host_path:container_path (to bind-mount a host path into the container), or host
 
 \item{PortBindings}{A map of exposed container ports and the host port they should map to. It should be specified in the form { <port>/<protocol>: [{ "HostPort": "<port>" }] }
 Take note that port is specified as a string and not an integer value. Corresponds to docker run -p. If HostIp is non empty you may need a port exposed. See ExposedPorts in containerOpt.
-\describe{ As as example: \code{PortBindings = list(`3838/tcp` = list(list(HostIp = "", HostPort = "3838")))} would correspond to
+\describe{
+\item{Example:}{As as example: \code{PortBindings = list(`3838/tcp` = list(list(HostIp = "", HostPort = "3838")))} would correspond to
 \code{docker run -p 3838:3838}
+}
 }}
 
 \item{Links}{A character vector of links for the container. Each link entry should be of of the form "container_name:alias".}
