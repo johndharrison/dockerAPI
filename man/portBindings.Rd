@@ -13,7 +13,7 @@ portBindings(ipHostPort = NULL, containerPort = NULL)
 }
 \description{
 \code{portBindings}
-A utility function to create Port Bindings options suitable for the PortBindings argument in \code{\link{hostConfig()}}.
+A utility function to create Port Bindings options suitable for the PortBindings argument in \code{\link{hostConfig}}.
 }
 \examples{
 \dontrun{

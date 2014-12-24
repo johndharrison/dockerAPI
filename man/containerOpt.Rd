@@ -38,13 +38,15 @@ containerOpt(Image, Hostname = "", Domainname = "", User = "",
 
 \item{AttachStderr}{Boolean value, attaches to stdin. Corresponds to docker run -a stderr}
 
-\item{PortSpecs}{}
+\item{PortSpecs}{ADD DOCU}
 
 \item{ExposedPorts}{An object mapping ports to an empty object in the form of: "ExposedPorts": { "<port>/<tcp|udp>: {}" }. See \url{http://stackoverflow.com/questions/20428302/binding-a-port-to-a-host-interface-using-the-rest-api}}
 
 \item{Tty}{Boolean value, Attach standard streams to a tty, including stdin if it is not closed. Corresponds to docker run -t}
 
 \item{OpenStdin}{Boolean value, opens stdin. Corresponds to docker run -i.}
+
+\item{StdinOnce}{Boolean value, opens stdin. Corresponds to docker run -i.}
 
 \item{Env}{A list of environment variables in the form of VAR=value. Corresponds to docker run -e
 \describe{ As an example: \code{Env = list(MYVAR1=foo1, MYVAR2=foo2)} would correspond to \code{docker run -e MYVAR1=foo1 -e MYVAR2=foo2}}}
@@ -62,11 +64,9 @@ containerOpt(Image, Hostname = "", Domainname = "", User = "",
 
 \item{MacAddress}{Container MAC address. Corresponds to docker run --mac-address=...}
 
-\item{OnBuild}{}
+\item{OnBuild}{ADD DOCU}
 
 \item{HostConfig}{The host configuration. See \code{\link{hostConfig}}}
-
-\item{OpenStdinOnce}{Boolean value, opens stdin. Corresponds to docker run -i.}
 }
 \description{
 \code{containerOpt}

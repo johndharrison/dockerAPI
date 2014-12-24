@@ -11,8 +11,4 @@ errorHandler Class uses the
 \details{
 errorHandler is a generator object.
 }
-\examples{
-\dontrun{
-}
-}
 

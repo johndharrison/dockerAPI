@@ -41,23 +41,23 @@ Take note that port is specified as a string and not an integer value. Correspon
 
 \item{DnsSearch}{A character vector of DNS search domains}
 
-\item{ExtraHosts}{}
+\item{ExtraHosts}{ADD DOCU}
 
 \item{VolumesFrom}{A list of volumes to inherit from another container. Specified in the form <container name>[:<ro|rw>]. Corresponds to docker run -volumes-from.}
 
-\item{Devices}{}
+\item{Devices}{ADD DOCU}
 
-\item{NetworkMode}{}
+\item{NetworkMode}{ADD DOCU}
 
-\item{IpcMode}{}
+\item{IpcMode}{ADD DOCU}
 
-\item{CapAdd}{}
+\item{CapAdd}{ADD DOCU}
 
-\item{CapDrop}{}
+\item{CapDrop}{ADD DOCU}
 
-\item{RestartPolicy}{}
+\item{RestartPolicy}{ADD DOCU}
 
-\item{SecurityOpt}{}
+\item{SecurityOpt}{ADD DOCU}
 }
 \description{
 \code{hostConfig}
