@@ -25,3 +25,14 @@ print.containerList <- function(x, ...){
   }
   
 }
+
+#' @export
+`$.containerList` <- function(x, name){
+  x[, name]
+}
+
+#' @export
+#' @importFrom utils .DollarNames
+.DollarNames.containerList <- function(x, pattern){
+  grep(pattern, names(rbind(x)), value=TRUE)
+}
