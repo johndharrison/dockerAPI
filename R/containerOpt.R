@@ -15,11 +15,11 @@
 #' @param AttachStdin Boolean value, attaches to stdin. Corresponds to docker run -a stdin
 #' @param AttachStdout Boolean value, attaches to stdin. Corresponds to docker run -a stdout
 #' @param AttachStderr Boolean value, attaches to stdin. Corresponds to docker run -a stderr
-#' @param PortSpecs
+#' @param PortSpecs ADD DOCU
 #' @param ExposedPorts An object mapping ports to an empty object in the form of: "ExposedPorts": { "<port>/<tcp|udp>: {}" }. See \url{http://stackoverflow.com/questions/20428302/binding-a-port-to-a-host-interface-using-the-rest-api}
 #' @param Tty Boolean value, Attach standard streams to a tty, including stdin if it is not closed. Corresponds to docker run -t
 #' @param OpenStdin Boolean value, opens stdin. Corresponds to docker run -i.
-#' @param OpenStdinOnce Boolean value, opens stdin. Corresponds to docker run -i.
+#' @param StdinOnce Boolean value, opens stdin. Corresponds to docker run -i.
 #' @param Env A list of environment variables in the form of VAR=value. Corresponds to docker run -e
 #'  \describe{ As an example: \code{Env = list(MYVAR1=foo1, MYVAR2=foo2)} would correspond to \code{docker run -e MYVAR1=foo1 -e MYVAR2=foo2}}
 #' @param Cmd Command to run specified as a string or an array of strings. 
@@ -29,7 +29,7 @@
 #' @param Entrypoint Set the entrypoint for the container as a string or an array of strings. Corresponds to docker run --entrypoint=""
 #' @param NetworkDisabled Boolean value, when true disables neworking for the container. Corresponds to 
 #' @param MacAddress Container MAC address. Corresponds to docker run --mac-address=...
-#' @param OnBuild
+#' @param OnBuild ADD DOCU
 #' @param HostConfig The host configuration. See \code{\link{hostConfig}}
 #' @examples
 #' \dontrun{
@@ -77,15 +77,15 @@ containerOpt <- function(Image, Hostname = "", Domainname = "", User = "", Memor
 #'  @param PublishAllPorts Allocates a random host port for all of a container's exposed ports. Specified as a boolean value.
 #'  @param Dns A character vector of dns servers for the container to use. Example c("8.8.8.8", "8.8.4.4")
 #'  @param DnsSearch A character vector of DNS search domains
-#'  @param ExtraHosts
+#'  @param ExtraHosts ADD DOCU
 #'  @param VolumesFrom A list of volumes to inherit from another container. Specified in the form <container name>[:<ro|rw>]. Corresponds to docker run -volumes-from. 
-#'  @param Devices
-#'  @param NetworkMode
-#'  @param IpcMode
-#'  @param CapAdd
-#'  @param CapDrop
-#'  @param RestartPolicy
-#'  @param SecurityOpt
+#'  @param Devices ADD DOCU
+#'  @param NetworkMode ADD DOCU
+#'  @param IpcMode ADD DOCU
+#'  @param CapAdd ADD DOCU
+#'  @param CapDrop ADD DOCU
+#'  @param RestartPolicy ADD DOCU
+#'  @param SecurityOpt ADD DOCU
 #' @examples
 #' \dontrun{
 #' hostConfig()
@@ -108,7 +108,7 @@ hostConfig <- function(Binds = NA, ContainerIDFile = "", LxcConf = data.frame(Ke
 #' Create Port Bindings options
 #'
 #' \code{portBindings}
-#' A utility function to create Port Bindings options suitable for the PortBindings argument in \code{\link{hostConfig()}}.
+#' A utility function to create Port Bindings options suitable for the PortBindings argument in \code{\link{hostConfig}}.
 #' @export
 #' @param ipHostPort host A character vector of host interface and host port listings
 #' @param containerPort A character vector of container ports. Format (80, 80/tcp 80/udp etc)
