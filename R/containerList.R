@@ -28,7 +28,7 @@ print.containerList <- function(x, ...){
 
 #' @export
 `$.containerList` <- function(x, name){
-  x[, name]
+  rbind(x)[[name]]
 }
 
 #' @export

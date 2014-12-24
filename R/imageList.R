@@ -28,7 +28,7 @@ print.imageList <- function(x, ...){
 
 #' @export
 `$.imageList` <- function(x, name){
-  x[, name]
+  rbind(x)[[name]]
 }
 
 #' @export
