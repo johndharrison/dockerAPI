@@ -1,3 +1,7 @@
+# dockerAPI 0.1.3
+* Overload $ operator for containerList class and allow tab completion.
+* Add prepareJSON helper functions and containerOpts related classses.
+
 # dockerAPI 0.1.2
 * Add dockerConf field to docker class to add peresistent curl options.
 
