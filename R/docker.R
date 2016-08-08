@@ -71,7 +71,9 @@ docker <- setRefClass("docker",
                                     , GET, ...)
                           res <- content(response, simplifyDataFrame = TRUE)
                           if(identical(res, list())){return(res)}
-                          names(res) <- c("command", "created", "id", "image", "names", "ports", "status")
+                          appNames <- c("command", "created", "id", "image", "names", "ports", "status")
+                          appMatches <- match(tolower(appNames), tolower(names(res)))
+                          names(res)[appMatches] <- appNames 
                           res$created <- as.POSIXct(res$created, origin = "1970-01-01")
                           containers <- lapply(seq(nrow(res)), function(x){
                             do.call(dockerContainer, res[x,])$import(.self)
@@ -90,7 +92,9 @@ docker <- setRefClass("docker",
                                     , GET, ...)
                           res <- content(response, simplifyDataFrame = TRUE)
                           if(identical(res, list())){return(res)}
-                          names(res) <- c("created", "id", "parentId", "repoTags", "size", "virtualSize")
+                          appNames <-  c("created", "id", "parentId", "repoTags", "size", "virtualSize")
+                          appMatches <- match(tolower(appNames), tolower(names(res)))
+                          names(res)[appMatches] <- appNames 
                           res$created <- as.POSIXct(res$created, origin = "1970-01-01")
                           containers <- lapply(seq(nrow(res)), function(x){
                             do.call(dockerImage, res[x,])$import(.self)
