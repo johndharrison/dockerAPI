@@ -75,6 +75,7 @@ docker <- setRefClass("docker",
                           appMatches <- match(tolower(appNames), tolower(names(res)))
                           names(res)[appMatches] <- appNames 
                           res$created <- as.POSIXct(res$created, origin = "1970-01-01")
+                          res <- res[, appNames]
                           containers <- lapply(seq(nrow(res)), function(x){
                             do.call(dockerContainer, res[x,])$import(.self)
                           })
@@ -96,10 +97,11 @@ docker <- setRefClass("docker",
                           appMatches <- match(tolower(appNames), tolower(names(res)))
                           names(res)[appMatches] <- appNames 
                           res$created <- as.POSIXct(res$created, origin = "1970-01-01")
-                          containers <- lapply(seq(nrow(res)), function(x){
+                          res <- res[, appNames]
+                          images <- lapply(seq(nrow(res)), function(x){
                             do.call(dockerImage, res[x,])$import(.self)
                           })
-                          `class<-`(containers, "imageList")
+                          `class<-`(images, "imageList")
                         },
                         
                         createImage = function(fromImage, fromSrc = NULL, repo = NULL, tag = NULL
