@@ -1,5 +1,5 @@
 setOldClass("url")
-setOldClass("config")
+setOldClass("request")
 #' docker Class uses the 
 #' 
 #' docker is a generator object. 
@@ -30,7 +30,7 @@ setOldClass("config")
 
 docker <- setRefClass("docker",
                       contains = "errorHandler",
-                      fields = list(dockerUrl = "url", dockerConf = "config"),
+                      fields = list(dockerUrl = "url", dockerConf = "request"),
                       methods = list(
                         initialize = function(dckUrl = NULL, dckrConf = config(), ...){
                           if(is.null(dckUrl)){
